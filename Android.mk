@@ -53,6 +53,7 @@ LOCAL_ARM_MODE := arm
 
 LOCAL_CFLAGS += \
 	-fPIC \
+	-funsafe-math-optimizations \
 	-Wno-unused-parameter \
 	-U_FORTIFY_SOURCE \
 	-D_FORTIFY_SOURCE=1 \
