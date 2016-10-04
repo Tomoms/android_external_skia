@@ -57,7 +57,7 @@
     here.
  */
 //#define SK_DEBUG
-//#define SK_RELEASE
+#define SK_RELEASE
 
 /*  Skia has certain debug-only code that is extremely intensive even for debug
     builds.  This code is useful for diagnosing specific issues, but is not
