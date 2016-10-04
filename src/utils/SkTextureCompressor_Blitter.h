@@ -458,7 +458,7 @@ private:
             return;
         }
 
-#ifndef NDEBUG
+#ifndef SK_RELEASE
         // Make sure that if we have any runs, they all match
         for (int i = 1; i < fNextRun; ++i) {
             SkASSERT(fBufferedRuns[i].fY == fBufferedRuns[i-1].fY + 1);
