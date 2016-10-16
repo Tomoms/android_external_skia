@@ -838,6 +838,7 @@ LOCAL_WHOLE_STATIC_LIBRARIES := libskia_static
 LOCAL_SHARED_LIBRARIES := \
         libcutils
 
+LOCAL_SDCLANG_LTO := true
 LOCAL_FDO_SUPPORT := true
 
 ifeq ($(TARGET_HAVE_QC_PERF),true)
