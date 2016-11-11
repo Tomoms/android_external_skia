@@ -306,7 +306,7 @@ SkCodec::Result SkJpegCodec::onGetPixels(const SkImageInfo& dstInfo,
 #else
     dinfo->dct_method = JDCT_ISLOW;
 #endif
-// Now, given valid output dimensions, we can start the decompress
+    // Now, given valid output dimensions, we can start the decompress
     if (!jpeg_start_decompress(dinfo)) {
         return fDecoderMgr->returnFailure("startDecompress", kInvalidInput);
     }
