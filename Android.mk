@@ -44,7 +44,7 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 LOCAL_SDCLANG_LTO := true
-LOCAL_SDCLANG_LTO_LDFLAGS := -O3 -fPIC -funsafe-math-optimizations
+LOCAL_SDCLANG_LTO_LDFLAGS := -O3 -fPIC
 LOCAL_FDO_SUPPORT := true
 # This should be the last -Oxxx specified in LOCAL_CFLAGS
 LOCAL_CFLAGS += -O3
@@ -62,12 +62,9 @@ LOCAL_CFLAGS += \
 	-Wno-clobbered -Wno-error \
 	-fexceptions
 
-ifeq ($(strip $(TARGET_ARCH)),arm)
-  ifeq ($(ARCH_ARM_HAVE_NEON),true)
-    LOCAL_CFLAGS += -funsafe-math-optimizations
-  endif
+ifeq ($(ARCH_ARM_HAVE_NEON),true)
+  LOCAL_CFLAGS_arm += -funsafe-math-optimizations
 endif
-
 
 LOCAL_CPPFLAGS := \
 	-std=c++11 \
