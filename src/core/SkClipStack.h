@@ -367,7 +367,7 @@ public:
      */
     void getBounds(SkRect* canvFiniteBound,
                    BoundsType* boundType,
-                   bool* isIntersectionOfRects = NULL) const;
+                   bool* isIntersectionOfRects = nullptr) const;
 
     SkRect bounds(const SkIRect& deviceBounds) const;
     bool isEmpty(const SkIRect& deviceBounds) const;
@@ -533,7 +533,7 @@ public:
                                int maxWidth,
                                int maxHeight,
                                SkRect* devBounds,
-                               bool* isIntersectionOfRects = NULL) const;
+                               bool* isIntersectionOfRects = nullptr) const;
 
 private:
     friend class Iter;

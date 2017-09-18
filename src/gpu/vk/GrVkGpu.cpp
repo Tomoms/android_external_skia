@@ -1037,7 +1037,7 @@ void GrVkGpu::generateMipmap(GrVkTexture* tex) {
     VkImageAspectFlags aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT;
     VkImageMemoryBarrier imageMemoryBarrier = {
         VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,          // sType
-        NULL,                                            // pNext
+        nullptr,                                         // pNext
         VK_ACCESS_TRANSFER_WRITE_BIT,                    // srcAccessMask
         VK_ACCESS_TRANSFER_READ_BIT,                     // dstAccessMask
         VK_IMAGE_LAYOUT_GENERAL,                         // oldLayout
@@ -1180,7 +1180,7 @@ GrBackendObject GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, i
 
     const VkImageCreateInfo imageCreateInfo = {
         VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,         // sType
-        NULL,                                        // pNext
+        nullptr,                                     // pNext
         0,                                           // VkImageCreateFlags
         VK_IMAGE_TYPE_2D,                            // VkImageType
         pixelFormat,                                 // VkFormat
@@ -1262,7 +1262,7 @@ GrBackendObject GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, i
 
         const VkCommandBufferAllocateInfo cmdInfo = {
             VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,   // sType
-            NULL,                                             // pNext
+            nullptr,                                          // pNext
             fCmdPool,                                         // commandPool
             VK_COMMAND_BUFFER_LEVEL_PRIMARY,                  // level
             1                                                 // bufferCount

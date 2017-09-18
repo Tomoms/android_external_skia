@@ -12,6 +12,7 @@
 #include "../private/SkPathRef.h"
 
 class SkAutoPathBoundsUpdate;
+class SkData;
 class SkRRect;
 class SkWStream;
 
@@ -662,7 +663,7 @@ public:
      *  @param direction If not null, set to the rectangle's direction
      *  @return true if the path specifies a rectangle
      */
-    bool isRect(SkRect* rect, bool* isClosed = NULL, Direction* direction = NULL) const;
+    bool isRect(SkRect* rect, bool* isClosed = nullptr, Direction* direction = nullptr) const;
 
     /** Returns true if the path specifies a pair of nested rectangles, or would draw a
         pair of nested rectangles when filled. If so, and if
@@ -676,7 +677,7 @@ public:
         @param dirs If not null, returns the direction of the rects
         @return true if the path describes a pair of nested rectangles
     */
-    bool isNestedFillRects(SkRect rect[2], Direction dirs[2] = NULL) const;
+    bool isNestedFillRects(SkRect rect[2], Direction dirs[2] = nullptr) const;
 
     /**
      *  Add a closed rectangle contour to the path
@@ -1090,6 +1091,12 @@ public:
      *  If buffer is NULL, it still returns the number of bytes.
      */
     size_t writeToMemory(void* buffer) const;
+
+    /**
+     *  Write the path to a buffer. Can recreate the path by calling readFromMemory().
+     */
+    sk_sp<SkData> serialize() const;
+
     /**
      * Initializes the path from the buffer
      *

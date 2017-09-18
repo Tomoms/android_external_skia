@@ -100,7 +100,7 @@ public:
         fAddedToCache.store(true);
     }
 
-    virtual SkDiscardableMemory* diagnostic_only_getDiscardable() const { return NULL; }
+    virtual SkDiscardableMemory* diagnostic_only_getDiscardable() const { return nullptr; }
 
 #ifdef SK_SUPPORT_LEGACY_COLORTABLE
     SkPixelRef(int width, int height, void* addr, size_t rowBytes, sk_sp<SkColorTable>);

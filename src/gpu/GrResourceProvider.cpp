@@ -278,7 +278,7 @@ GrTexture* GrResourceProvider::findAndRefTextureByUniqueKey(const GrUniqueKey& k
         SkASSERT(texture);
         return texture;
     }
-    return NULL;
+    return nullptr;
 }
 
 void GrResourceProvider::assignUniqueKeyToTexture(const GrUniqueKey& key, GrTexture* texture) {

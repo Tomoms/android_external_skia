@@ -184,9 +184,9 @@ public:
                                   SkScalar y,
                                   int textByteCount,
                                   SkString lang,
-                                  const SkRect* bounds = NULL);
+                                  const SkRect* bounds = nullptr);
     const RunBuffer& allocRun(const SkPaint& font, int count, SkScalar x, SkScalar y,
-                              const SkRect* bounds = NULL) {
+                              const SkRect* bounds = nullptr) {
         return this->allocRunText(font, count, x, y, 0, SkString(), bounds);
     }
 
@@ -209,9 +209,9 @@ public:
      */
     const RunBuffer& allocRunTextPosH(const SkPaint& font, int count, SkScalar y,
                                       int textByteCount, SkString lang,
-                                      const SkRect* bounds = NULL);
+                                      const SkRect* bounds = nullptr);
     const RunBuffer& allocRunPosH(const SkPaint& font, int count, SkScalar y,
-                                  const SkRect* bounds = NULL) {
+                                  const SkRect* bounds = nullptr) {
         return this->allocRunTextPosH(font, count, y, 0, SkString(), bounds);
     }
 
@@ -234,9 +234,9 @@ public:
      */
     const RunBuffer& allocRunTextPos(const SkPaint& font, int count,
                                      int textByteCount, SkString lang,
-                                     const SkRect* bounds = NULL);
+                                     const SkRect* bounds = nullptr);
     const RunBuffer& allocRunPos(const SkPaint& font, int count,
-                                 const SkRect* bounds = NULL) {
+                                 const SkRect* bounds = nullptr) {
         return this->allocRunTextPos(font, count, 0, SkString(), bounds);
     }
 

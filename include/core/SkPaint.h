@@ -455,7 +455,7 @@ public:
                      SkScalar resScale = 1) const;
 
     bool getFillPath(const SkPath& src, SkPath* dst) const {
-        return this->getFillPath(src, dst, NULL, 1);
+        return this->getFillPath(src, dst, nullptr, 1);
     }
 
     /** Get the paint's shader object.
@@ -760,7 +760,7 @@ public:
     /** Return the recommend line spacing. This will be
         fDescent - fAscent + fLeading
     */
-    SkScalar getFontSpacing() const { return this->getFontMetrics(NULL, 0); }
+    SkScalar getFontSpacing() const { return this->getFontMetrics(nullptr, 0); }
 
     /** Convert the specified text into glyph IDs, returning the number of
         glyphs ID written. If glyphs is NULL, it is ignore and only the count
@@ -790,7 +790,7 @@ public:
         instead.
     */
     int countText(const void* text, size_t byteLength) const {
-        return this->textToGlyphs(text, byteLength, NULL);
+        return this->textToGlyphs(text, byteLength, nullptr);
     }
 
     /** Return the width of the text. This will return the vertical measure
@@ -814,7 +814,7 @@ public:
      *  @return         The advance width of the text
      */
     SkScalar measureText(const void* text, size_t length) const {
-        return this->measureText(text, length, NULL);
+        return this->measureText(text, length, nullptr);
     }
 
     /** Return the number of bytes of text that were measured. If
@@ -831,7 +831,7 @@ public:
      *                  <= length.
      */
     size_t  breakText(const void* text, size_t length, SkScalar maxWidth,
-                      SkScalar* measuredWidth = NULL) const;
+                      SkScalar* measuredWidth = nullptr) const;
 
     /** Return the advances for the text. These will be vertical advances if
      *  isVerticalText() returns true.
@@ -846,7 +846,7 @@ public:
      *  @return the number of unichars in the specified text.
      */
     int getTextWidths(const void* text, size_t byteLength, SkScalar widths[],
-                      SkRect bounds[] = NULL) const;
+                      SkRect bounds[] = nullptr) const;
 
     /** Return the path (outline) for the specified text.
      *  Note: just like SkCanvas::drawText, this will respect the Align setting

@@ -197,7 +197,7 @@ protected:
      */
     virtual void drawPath(const SkPath& path,
                           const SkPaint& paint,
-                          const SkMatrix* prePathMatrix = NULL,
+                          const SkMatrix* prePathMatrix = nullptr,
                           bool pathIsMutable = false) = 0;
     virtual void drawBitmap(const SkBitmap& bitmap,
                             SkScalar x,
@@ -339,7 +339,7 @@ protected:
      *  it could not call drawDevice with it (but it could call drawSprite or drawBitmap).
      */
     virtual SkBaseDevice* onCreateDevice(const CreateInfo&, const SkPaint*) {
-        return NULL;
+        return nullptr;
     }
 
     // A helper function used by derived classes to log the scale factor of a bitmap or image draw.
@@ -375,7 +375,7 @@ private:
      */
     virtual void flush() {}
 
-    virtual SkImageFilterCache* getImageFilterCache() { return NULL; }
+    virtual SkImageFilterCache* getImageFilterCache() { return nullptr; }
 
     friend class SkNoPixelsDevice;
     friend class SkBitmapDevice;

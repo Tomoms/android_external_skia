@@ -8,6 +8,7 @@
 #include <cmath>
 #include "SkBuffer.h"
 #include "SkCubicClipper.h"
+#include "SkData.h"
 #include "SkGeometry.h"
 #include "SkMath.h"
 #include "SkPathPriv.h"
@@ -274,8 +275,8 @@ bool SkPath::conservativelyContainsRect(const SkRect& rect) const {
     SkPath::Iter iter(*this, true);
     SkPath::Verb verb;
     SkPoint pts[4];
+    int segmentCount = 0;
     SkDEBUGCODE(int moveCnt = 0;)
-    SkDEBUGCODE(int segmentCount = 0;)
     SkDEBUGCODE(int closeCount = 0;)
 
     while ((verb = iter.next(pts, true, true)) != kDone_Verb) {
@@ -289,17 +290,17 @@ bool SkPath::conservativelyContainsRect(const SkRect& rect) const {
             case kLine_Verb:
                 nextPt = 1;
                 SkASSERT(moveCnt && !closeCount);
-                SkDEBUGCODE(++segmentCount);
+                ++segmentCount;
                 break;
             case kQuad_Verb:
             case kConic_Verb:
                 SkASSERT(moveCnt && !closeCount);
-                SkDEBUGCODE(++segmentCount);
+                ++segmentCount;
                 nextPt = 2;
                 break;
             case kCubic_Verb:
                 SkASSERT(moveCnt && !closeCount);
-                SkDEBUGCODE(++segmentCount);
+                ++segmentCount;
                 nextPt = 3;
                 break;
             case kClose_Verb:
@@ -331,7 +332,10 @@ bool SkPath::conservativelyContainsRect(const SkRect& rect) const {
         }
     }
 
-    return check_edge_against_rect(prevPt, firstPt, rect, direction);
+    if (segmentCount) {
+        return check_edge_against_rect(prevPt, firstPt, rect, direction);
+    }
+    return false;
 }
 
 uint32_t SkPath::getGenerationID() const {
@@ -1873,8 +1877,8 @@ const SkPoint& SkPath::Iter::cons_moveTo() {
 void SkPath::Iter::consumeDegenerateSegments(bool exact) {
     // We need to step over anything that will not move the current draw point
     // forward before the next move is seen
-    const uint8_t* lastMoveVerb = 0;
-    const SkPoint* lastMovePt = 0;
+    const uint8_t* lastMoveVerb = nullptr;
+    const SkPoint* lastMovePt = nullptr;
     const SkScalar* lastMoveWeight = nullptr;
     SkPoint lastPt = fLastPt;
     while (fVerbs != fVerbStop) {
@@ -2059,6 +2063,13 @@ size_t SkPath::writeToMemory(void* storage) const {
 
     buffer.padToAlign4();
     return buffer.pos();
+}
+
+sk_sp<SkData> SkPath::serialize() const {
+    size_t size = this->writeToMemory(nullptr);
+    sk_sp<SkData> data = SkData::MakeUninitialized(size);
+    this->writeToMemory(data->writable_data());
+    return data;
 }
 
 size_t SkPath::readFromMemory(const void* storage, size_t length) {
@@ -2281,7 +2292,8 @@ struct Convexicator {
     , fConvexity(SkPath::kConvex_Convexity)
     , fFirstDirection(SkPathPriv::kUnknown_FirstDirection)
     , fIsFinite(true)
-    , fIsCurve(false) {
+    , fIsCurve(false)
+    , fBackwards(false) {
         fExpectedDir = kInvalid_DirChange;
         // warnings
         fPriorPt.set(0,0);
@@ -2380,6 +2392,9 @@ struct Convexicator {
         return kStraight_DirChange;
     }
 
+    bool hasBackwards() const {
+        return fBackwards;
+    }
 
     bool isFinite() const {
         return fIsFinite;
@@ -2415,6 +2430,7 @@ private:
                     fExpectedDir = dir;
                 }
                 fLastVec = vec;
+                fBackwards = true;
                 break;
             case kInvalid_DirChange:
                 SkFAIL("Use of invalid direction change flag");
@@ -2435,6 +2451,7 @@ private:
     int                 fDx, fDy, fSx, fSy;
     bool                fIsFinite;
     bool                fIsCurve;
+    bool                fBackwards;
 };
 
 SkPath::Convexity SkPath::internalGetConvexity() const {
@@ -2450,7 +2467,7 @@ SkPath::Convexity SkPath::internalGetConvexity() const {
     if (!isFinite()) {
         return kUnknown_Convexity;
     }
-    while ((verb = iter.next(pts, true, true)) != SkPath::kDone_Verb) {
+    while ((verb = iter.next(pts, false, false)) != SkPath::kDone_Verb) {
         switch (verb) {
             case kMove_Verb:
                 if (++contourCount > 1) {
@@ -2498,7 +2515,12 @@ SkPath::Convexity SkPath::internalGetConvexity() const {
     }
     fConvexity = state.getConvexity();
     if (kConvex_Convexity == fConvexity && SkPathPriv::kUnknown_FirstDirection == fFirstDirection) {
-        fFirstDirection = state.getFirstDirection();
+        if (SkPathPriv::kUnknown_FirstDirection == state.getFirstDirection() &&
+                !this->getBounds().isEmpty() && !state.hasBackwards()) {
+            fConvexity = Convexity::kConcave_Convexity;
+        } else {
+            fFirstDirection = state.getFirstDirection();
+        }
     }
     return static_cast<Convexity>(fConvexity);
 }
