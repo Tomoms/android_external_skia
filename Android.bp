@@ -854,6 +854,8 @@ cc_library {
         "libwebp-encode",
     ],
 
+   polly: false,
+
     lto: {
         thin: true,
     },
