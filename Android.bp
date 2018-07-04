@@ -2,6 +2,7 @@
 
 cc_library {
     name: "libskia",
+    cpp_std: "c++17",
     cflags: [
         "-fexceptions",
         "-Wno-unused-parameter",
