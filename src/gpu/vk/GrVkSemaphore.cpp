@@ -26,7 +26,7 @@ sk_sp<GrVkSemaphore> GrVkSemaphore::Make(const GrVkGpu* gpu, bool isOwned) {
     createInfo.flags = 0;
     VkSemaphore semaphore = VK_NULL_HANDLE;
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(),
-                        CreateSemaphore(gpu->device(), &createInfo, nullptr, &semaphore));
+                        CreateSemaphore(gpu->device(), &createInfo, nullptr, &semaphore))
 
     return sk_sp<GrVkSemaphore>(new GrVkSemaphore(gpu, semaphore, false, false, isOwned));
 }
@@ -61,7 +61,7 @@ GrVkSemaphore::~GrVkSemaphore() {
 void GrVkSemaphore::Resource::freeGPUData(const GrVkGpu* gpu) const {
     if (fIsOwned) {
         GR_VK_CALL(gpu->vkInterface(),
-                   DestroySemaphore(gpu->device(), fSemaphore, nullptr));
+                   DestroySemaphore(gpu->device(), fSemaphore, nullptr))
     }
 }
 

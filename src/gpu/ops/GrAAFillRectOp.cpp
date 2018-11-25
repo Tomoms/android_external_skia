@@ -35,7 +35,7 @@ static const int kVertsPerAAFillRect = 8;
 static const int kIndicesPerAAFillRect = 30;
 
 static sk_sp<const GrBuffer> get_index_buffer(GrResourceProvider* resourceProvider) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gAAFillRectIndexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gAAFillRectIndexBufferKey)
 
     // clang-format off
     static const uint16_t gFillAARectIdx[] = {

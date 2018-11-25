@@ -46,7 +46,7 @@ bool GrSurfaceContext::readPixels(const SkImageInfo& dstInfo, void* dstBuffer,
     ASSERT_SINGLE_OWNER
     RETURN_FALSE_IF_ABANDONED
     SkDEBUGCODE(this->validate();)
-    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::readPixels");
+    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::readPixels")
 
     // TODO: this seems to duplicate code in SkImage_Gpu::onReadPixels
     if (kUnpremul_SkAlphaType == dstInfo.alphaType()) {
@@ -66,7 +66,7 @@ bool GrSurfaceContext::writePixels(const SkImageInfo& srcInfo, const void* srcBu
     ASSERT_SINGLE_OWNER
     RETURN_FALSE_IF_ABANDONED
     SkDEBUGCODE(this->validate();)
-    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::writePixels");
+    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::writePixels")
 
     if (kUnpremul_SkAlphaType == srcInfo.alphaType()) {
         flags |= GrContextPriv::kUnpremul_PixelOpsFlag;
@@ -84,7 +84,7 @@ bool GrSurfaceContext::copy(GrSurfaceProxy* src, const SkIRect& srcRect, const S
     ASSERT_SINGLE_OWNER
     RETURN_FALSE_IF_ABANDONED
     SkDEBUGCODE(this->validate();)
-    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::onCopy");
+    GR_AUDIT_TRAIL_AUTO_FRAME(fAuditTrail, "GrSurfaceContext::onCopy")
 
     return this->getOpList()->copySurface(*fContext->caps(),
                                           this->asSurfaceProxy(), src, srcRect, dstPoint);

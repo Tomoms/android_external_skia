@@ -347,7 +347,7 @@ bool GrCompileVkShaderModule(const GrVkGpu* gpu,
     VkResult err = GR_VK_CALL(gpu->vkInterface(), CreateShaderModule(gpu->device(),
                                                                      &moduleCreateInfo,
                                                                      nullptr,
-                                                                     shaderModule));
+                                                                     shaderModule))
     if (err) {
         return false;
     }

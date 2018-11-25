@@ -44,7 +44,7 @@ void GrVkResourceProvider::init() {
     createInfo.pInitialData = nullptr;
     VkResult result = GR_VK_CALL(fGpu->vkInterface(),
                                  CreatePipelineCache(fGpu->device(), &createInfo, nullptr,
-                                                     &fPipelineCache));
+                                                     &fPipelineCache))
     SkASSERT(VK_SUCCESS == result);
     if (VK_SUCCESS != result) {
         fPipelineCache = VK_NULL_HANDLE;
@@ -361,7 +361,7 @@ void GrVkResourceProvider::destroyResources(bool deviceLost) {
 
     fPipelineStateCache->release();
 
-    GR_VK_CALL(fGpu->vkInterface(), DestroyPipelineCache(fGpu->device(), fPipelineCache, nullptr));
+    GR_VK_CALL(fGpu->vkInterface(), DestroyPipelineCache(fGpu->device(), fPipelineCache, nullptr))
     fPipelineCache = VK_NULL_HANDLE;
 
     // We must release/destroy all command buffers and pipeline states before releasing the

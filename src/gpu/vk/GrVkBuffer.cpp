@@ -57,7 +57,7 @@ const GrVkBuffer::Resource* GrVkBuffer::Create(const GrVkGpu* gpu, const Desc& d
     bufInfo.pQueueFamilyIndices = nullptr;
 
     VkResult err;
-    err = VK_CALL(gpu, CreateBuffer(gpu->device(), &bufInfo, nullptr, &buffer));
+    err = VK_CALL(gpu, CreateBuffer(gpu->device(), &bufInfo, nullptr, &buffer))
     if (err) {
         return nullptr;
     }
@@ -72,7 +72,7 @@ const GrVkBuffer::Resource* GrVkBuffer::Create(const GrVkGpu* gpu, const Desc& d
 
     const GrVkBuffer::Resource* resource = new GrVkBuffer::Resource(buffer, alloc, desc.fType);
     if (!resource) {
-        VK_CALL(gpu, DestroyBuffer(gpu->device(), buffer, nullptr));
+        VK_CALL(gpu, DestroyBuffer(gpu->device(), buffer, nullptr))
         GrVkMemory::FreeBufferMemory(gpu, desc.fType, alloc);
         return nullptr;
     }
@@ -105,7 +105,7 @@ void GrVkBuffer::addMemoryBarrier(const GrVkGpu* gpu,
 void GrVkBuffer::Resource::freeGPUData(const GrVkGpu* gpu) const {
     SkASSERT(fBuffer);
     SkASSERT(fAlloc.fMemory);
-    VK_CALL(gpu, DestroyBuffer(gpu->device(), fBuffer, nullptr));
+    VK_CALL(gpu, DestroyBuffer(gpu->device(), fBuffer, nullptr))
     GrVkMemory::FreeBufferMemory(gpu, fType, fAlloc);
 }
 
@@ -187,7 +187,7 @@ void GrVkBuffer::internalMap(GrVkGpu* gpu, size_t size, bool* createdNewBuffer) 
         SkASSERT(size + fOffset <= alloc.fSize);
         VkResult err = VK_CALL(gpu, MapMemory(gpu->device(), alloc.fMemory,
                                               alloc.fOffset + fOffset,
-                                              size, 0, &fMapPtr));
+                                              size, 0, &fMapPtr))
         if (err) {
             fMapPtr = nullptr;
             fMappedSize = 0;
@@ -213,7 +213,7 @@ void GrVkBuffer::internalUnmap(GrVkGpu* gpu, size_t size) {
                                                                                     : fMappedSize;
 
         GrVkMemory::FlushMappedAlloc(gpu, this->alloc(), flushOffset, flushSize);
-        VK_CALL(gpu, UnmapMemory(gpu->device(), this->alloc().fMemory));
+        VK_CALL(gpu, UnmapMemory(gpu->device(), this->alloc().fMemory))
         fMapPtr = nullptr;
         fMappedSize = 0;
     } else {

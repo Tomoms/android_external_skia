@@ -117,7 +117,7 @@ bool GrVkCopyManager::createCopyProgram(GrVkGpu* gpu) {
     VkResult err = GR_VK_CALL(gpu->vkInterface(), CreatePipelineLayout(gpu->device(),
                                                                        &layoutCreateInfo,
                                                                        nullptr,
-                                                                       &fPipelineLayout));
+                                                                       &fPipelineLayout))
     if (err) {
         this->destroyResources(gpu);
         return false;
@@ -251,7 +251,7 @@ bool GrVkCopyManager::copySurfaceAsDraw(GrVkGpu* gpu,
     GR_VK_CALL(gpu->vkInterface(), UpdateDescriptorSets(gpu->device(),
                                                         1,
                                                         &descriptorWrites,
-                                                        0, nullptr));
+                                                        0, nullptr))
 
     // UPDATE SAMPLER DESCRIPTOR SET
     const GrVkDescriptorSet* samplerDS =
@@ -284,7 +284,7 @@ bool GrVkCopyManager::copySurfaceAsDraw(GrVkGpu* gpu,
     GR_VK_CALL(gpu->vkInterface(), UpdateDescriptorSets(gpu->device(),
                                                         1,
                                                         &writeInfo,
-                                                        0, nullptr));
+                                                        0, nullptr))
 
     VkDescriptorSet vkDescSets[] = { uniformDS->descriptorSet(), samplerDS->descriptorSet() };
 
@@ -394,19 +394,19 @@ bool GrVkCopyManager::copySurfaceAsDraw(GrVkGpu* gpu,
 void GrVkCopyManager::destroyResources(GrVkGpu* gpu) {
     if (VK_NULL_HANDLE != fVertShaderModule) {
         GR_VK_CALL(gpu->vkInterface(), DestroyShaderModule(gpu->device(), fVertShaderModule,
-                                                           nullptr));
+                                                           nullptr))
         fVertShaderModule = VK_NULL_HANDLE;
     }
 
     if (VK_NULL_HANDLE != fFragShaderModule) {
         GR_VK_CALL(gpu->vkInterface(), DestroyShaderModule(gpu->device(), fFragShaderModule,
-                                                           nullptr));
+                                                           nullptr))
         fFragShaderModule = VK_NULL_HANDLE;
     }
 
     if (VK_NULL_HANDLE != fPipelineLayout) {
         GR_VK_CALL(gpu->vkInterface(), DestroyPipelineLayout(gpu->device(), fPipelineLayout,
-                                                             nullptr));
+                                                             nullptr))
         fPipelineLayout = VK_NULL_HANDLE;
     }
 

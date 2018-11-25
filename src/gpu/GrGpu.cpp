@@ -74,7 +74,7 @@ bool GrGpu::isACopyNeededForTextureParams(int width, int height,
 
 sk_sp<GrTexture> GrGpu::createTexture(const GrSurfaceDesc& origDesc, SkBudgeted budgeted,
                                       const GrMipLevel texels[], int mipLevelCount) {
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrGpu", "createTexture", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrGpu", "createTexture", fContext)
     GrSurfaceDesc desc = origDesc;
 
     GrMipMapped mipMapped = mipLevelCount > 1 ? GrMipMapped::kYes : GrMipMapped::kNo;
@@ -187,7 +187,7 @@ GrBuffer* GrGpu::createBuffer(size_t size, GrBufferType intendedType,
 bool GrGpu::copySurface(GrSurface* dst, GrSurfaceOrigin dstOrigin,
                         GrSurface* src, GrSurfaceOrigin srcOrigin,
                         const SkIRect& srcRect, const SkIPoint& dstPoint) {
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrGpu", "copySurface", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrGpu", "copySurface", fContext)
     SkASSERT(dst && src);
     this->handleDirtyContext();
     return this->onCopySurface(dst, dstOrigin, src, srcOrigin, srcRect, dstPoint);

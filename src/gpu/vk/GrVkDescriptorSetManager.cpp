@@ -200,7 +200,7 @@ GrVkDescriptorSetManager::DescriptorPoolManager::DescriptorPoolManager(
                             CreateDescriptorSetLayout(gpu->device(),
                                                       &dsSamplerLayoutCreateInfo,
                                                       nullptr,
-                                                      &fDescLayout));
+                                                      &fDescLayout))
         fDescCountPerSet = visibilities.count();
     } else {
         SkASSERT(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER == type);
@@ -230,7 +230,7 @@ GrVkDescriptorSetManager::DescriptorPoolManager::DescriptorPoolManager(
         GR_VK_CALL_ERRCHECK(gpu->vkInterface(), CreateDescriptorSetLayout(gpu->device(),
                                                                           &uniformLayoutCreateInfo,
                                                                           nullptr,
-                                                                          &fDescLayout));
+                                                                          &fDescLayout))
         fDescCountPerSet = kUniformDescPerSet;
     }
 
@@ -276,13 +276,13 @@ void GrVkDescriptorSetManager::DescriptorPoolManager::getNewDescriptorSet(GrVkGp
     dsAllocateInfo.pSetLayouts = &fDescLayout;
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), AllocateDescriptorSets(gpu->device(),
                                                                    &dsAllocateInfo,
-                                                                   ds));
+                                                                   ds))
 }
 
 void GrVkDescriptorSetManager::DescriptorPoolManager::freeGPUResources(const GrVkGpu* gpu) {
     if (fDescLayout) {
         GR_VK_CALL(gpu->vkInterface(), DestroyDescriptorSetLayout(gpu->device(), fDescLayout,
-                                                                  nullptr));
+                                                                  nullptr))
         fDescLayout = VK_NULL_HANDLE;
     }
 

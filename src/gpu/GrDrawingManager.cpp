@@ -118,7 +118,7 @@ GrSemaphoresSubmitted GrDrawingManager::internalFlush(GrSurfaceProxy*,
                                                       GrResourceCache::FlushType type,
                                                       int numSemaphores,
                                                       GrBackendSemaphore backendSemaphores[]) {
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrDrawingManager", "internalFlush", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrDrawingManager", "internalFlush", fContext)
 
     if (fFlushing || this->wasAbandoned()) {
         return GrSemaphoresSubmitted::kNo;

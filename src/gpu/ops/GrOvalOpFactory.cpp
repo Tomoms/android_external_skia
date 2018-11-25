@@ -2687,8 +2687,8 @@ GR_DECLARE_STATIC_UNIQUE_KEY(gStrokeRRectOnlyIndexBufferKey);
 GR_DECLARE_STATIC_UNIQUE_KEY(gRRectOnlyIndexBufferKey);
 static sk_sp<const GrBuffer> get_rrect_index_buffer(RRectType type,
                                                     GrResourceProvider* resourceProvider) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gStrokeRRectOnlyIndexBufferKey);
-    GR_DEFINE_STATIC_UNIQUE_KEY(gRRectOnlyIndexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gStrokeRRectOnlyIndexBufferKey)
+    GR_DEFINE_STATIC_UNIQUE_KEY(gRRectOnlyIndexBufferKey)
     switch (type) {
         case kFill_RRectType:
             return resourceProvider->findOrCreatePatternedIndexBuffer(
@@ -2701,7 +2701,7 @@ static sk_sp<const GrBuffer> get_rrect_index_buffer(RRectType type,
         default:
             SkASSERT(false);
             return nullptr;
-    };
+    }
 }
 
 class EllipticalRRectOp : public GrMeshDrawOp {

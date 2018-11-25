@@ -181,7 +181,7 @@ void GrTextureOpList::recordOp(std::unique_ptr<GrOp> op) {
     // A closed GrOpList should never receive new/more ops
     SkASSERT(!this->isClosed());
 
-    GR_AUDIT_TRAIL_ADD_OP(fAuditTrail, op.get(), fTarget.get()->uniqueID());
+    GR_AUDIT_TRAIL_ADD_OP(fAuditTrail, op.get(), fTarget.get()->uniqueID())
     GrOP_INFO("Re-Recording (%s, opID: %u)\n"
         "\tBounds LRTB (%f, %f, %f, %f)\n",
         op->name(),

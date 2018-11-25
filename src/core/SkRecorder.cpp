@@ -145,7 +145,7 @@ void SkRecorder::onDrawPoints(PointMode mode,
 }
 
 void SkRecorder::onDrawRect(const SkRect& rect, const SkPaint& paint) {
-    TRY_MINIRECORDER(drawRect, rect, paint);
+    TRY_MINIRECORDER(drawRect, rect, paint)
     APPEND(DrawRect, paint, rect);
 }
 
@@ -184,7 +184,7 @@ void SkRecorder::onDrawDrawable(SkDrawable* drawable, const SkMatrix* matrix) {
 }
 
 void SkRecorder::onDrawPath(const SkPath& path, const SkPaint& paint) {
-    TRY_MINIRECORDER(drawPath, path, paint);
+    TRY_MINIRECORDER(drawPath, path, paint)
     APPEND(DrawPath, paint, path);
 }
 
@@ -300,7 +300,7 @@ void SkRecorder::onDrawTextRSXform(const void* text, size_t byteLength, const Sk
 
 void SkRecorder::onDrawTextBlob(const SkTextBlob* blob, SkScalar x, SkScalar y,
                                 const SkPaint& paint) {
-    TRY_MINIRECORDER(drawTextBlob, blob, x, y, paint);
+    TRY_MINIRECORDER(drawTextBlob, blob, x, y, paint)
     APPEND(DrawTextBlob, paint, sk_ref_sp(blob), x, y);
 }
 

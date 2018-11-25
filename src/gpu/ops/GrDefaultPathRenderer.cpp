@@ -634,7 +634,7 @@ GrDefaultPathRenderer::onCanDrawPath(const CanDrawPathArgs& args) const {
 
 bool GrDefaultPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrDefaultPathRenderer::onDrawPath");
+                              "GrDefaultPathRenderer::onDrawPath")
     return this->internalDrawPath(args.fRenderTargetContext,
                                   std::move(args.fPaint),
                                   args.fAAType,
@@ -647,7 +647,7 @@ bool GrDefaultPathRenderer::onDrawPath(const DrawPathArgs& args) {
 
 void GrDefaultPathRenderer::onStencilPath(const StencilPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrDefaultPathRenderer::onStencilPath");
+                              "GrDefaultPathRenderer::onStencilPath")
     SkASSERT(!args.fShape->inverseFilled());
 
     GrPaint paint;

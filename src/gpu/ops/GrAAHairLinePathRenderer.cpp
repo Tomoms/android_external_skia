@@ -67,7 +67,7 @@ static const int kQuadsNumInIdxBuffer = 256;
 GR_DECLARE_STATIC_UNIQUE_KEY(gQuadsIndexBufferKey);
 
 static sk_sp<const GrBuffer> get_quads_index_buffer(GrResourceProvider* resourceProvider) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gQuadsIndexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gQuadsIndexBufferKey)
     return resourceProvider->findOrCreatePatternedIndexBuffer(
         kQuadIdxBufPattern, kIdxsPerQuad, kQuadsNumInIdxBuffer, kQuadNumVertices,
         gQuadsIndexBufferKey);
@@ -101,7 +101,7 @@ static const int kLineSegsNumInIdxBuffer = 256;
 GR_DECLARE_STATIC_UNIQUE_KEY(gLinesIndexBufferKey);
 
 static sk_sp<const GrBuffer> get_lines_index_buffer(GrResourceProvider* resourceProvider) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gLinesIndexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gLinesIndexBufferKey)
     return resourceProvider->findOrCreatePatternedIndexBuffer(
         kLineSegIdxBufPattern, kIdxsPerLineSeg,  kLineSegsNumInIdxBuffer, kLineSegNumVertices,
         gLinesIndexBufferKey);
@@ -1044,7 +1044,7 @@ void AAHairlineOp::onPrepareDraws(Target* target) {
 
 bool GrAAHairLinePathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrAAHairlinePathRenderer::onDrawPath");
+                              "GrAAHairlinePathRenderer::onDrawPath")
     SkASSERT(GrFSAAType::kUnifiedMSAA != args.fRenderTargetContext->fsaaType());
 
     SkIRect devClipBounds;

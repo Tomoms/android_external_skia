@@ -175,17 +175,17 @@ static const TagHandler axisHandler = {
                                                         (axisTag >> 24) & 0xFF,
                                                         (axisTag >> 16) & 0xFF,
                                                         (axisTag >>  8) & 0xFF,
-                                                        (axisTag      ) & 0xFF);
+                                                        (axisTag      ) & 0xFF)
                         }
                     }
                 } else {
-                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid axis tag", value);
+                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid axis tag", value)
                 }
             } else if (MEMEQ("stylevalue", name, nameLen)) {
                 if (parse_fixed<16>(value, &axisStyleValue)) {
                     axisStyleValueIsValid = true;
                 } else {
-                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid axis stylevalue", value);
+                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid axis stylevalue", value)
                 }
             }
         }
@@ -214,7 +214,7 @@ static const TagHandler fontHandler = {
             size_t nameLen = strlen(name);
             if (MEMEQ("weight", name, nameLen)) {
                 if (!parse_non_negative_integer(value, &file.fWeight)) {
-                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid weight", value);
+                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid weight", value)
                 }
             } else if (MEMEQ("style", name, nameLen)) {
                 size_t valueLen = strlen(value);
@@ -225,7 +225,7 @@ static const TagHandler fontHandler = {
                 }
             } else if (MEMEQ("index", name, nameLen)) {
                 if (!parse_non_negative_integer(value, &file.fIndex)) {
-                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid index", value);
+                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid index", value)
                 }
             }
         }
@@ -331,7 +331,7 @@ static const TagHandler aliasHandler = {
                 to.set(value);
             } else if (MEMEQ("weight", name, nameLen)) {
                 if (!parse_non_negative_integer(value, &weight)) {
-                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid weight", value);
+                    SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid weight", value)
                 }
             }
         }
@@ -339,7 +339,7 @@ static const TagHandler aliasHandler = {
         // Assumes that the named family is already declared
         FontFamily* targetFamily = find_family(self, to);
         if (!targetFamily) {
-            SK_FONTCONFIGPARSER_WARNING("'%s' alias target not found", to.c_str());
+            SK_FONTCONFIGPARSER_WARNING("'%s' alias target not found", to.c_str())
             return;
         }
 
@@ -405,7 +405,7 @@ static const TagHandler fileHandler = {
                     if (currentFamily.fFonts.count() > 1 && currentFamily.fVariant != prevVariant) {
                         SK_FONTCONFIGPARSER_WARNING("'%s' unexpected variant found\n"
                             "Note: Every font file within a family must have identical variants.",
-                            value);
+                            value)
                     }
 
                 } else if (MEMEQ("lang", name, nameLen)) {
@@ -421,12 +421,12 @@ static const TagHandler fileHandler = {
                     if (showWarning) {
                         SK_FONTCONFIGPARSER_WARNING("'%s' unexpected language found\n"
                             "Note: Every font file within a family must have identical languages.",
-                            value);
+                            value)
                     }
 
                 } else if (MEMEQ("index", name, nameLen)) {
                     if (!parse_non_negative_integer(value, &newFileInfo.fIndex)) {
-                        SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid index", value);
+                        SK_FONTCONFIGPARSER_WARNING("'%s' is an invalid index", value)
                     }
                 }
             }
@@ -559,7 +559,7 @@ static void XMLCALL start_element_handler(void *data, const char *tag, const cha
             self->fHandler.push(child);
             XML_SetCharacterDataHandler(self->fParser, child->chars);
         } else {
-            SK_FONTCONFIGPARSER_WARNING("'%s' tag not recognized, skipping", tag);
+            SK_FONTCONFIGPARSER_WARNING("'%s' tag not recognized, skipping", tag)
             XML_SetCharacterDataHandler(self->fParser, nullptr);
             self->fSkip = self->fDepth;
         }
@@ -600,7 +600,7 @@ static void XMLCALL xml_entity_decl_handler(void *data,
                                             const XML_Char *notationName)
 {
     FamilyData* self = static_cast<FamilyData*>(data);
-    SK_FONTCONFIGPARSER_WARNING("'%s' entity declaration found, stopping processing", entityName);
+    SK_FONTCONFIGPARSER_WARNING("'%s' entity declaration found, stopping processing", entityName)
     XML_StopParser(self->fParser, XML_FALSE);
 }
 

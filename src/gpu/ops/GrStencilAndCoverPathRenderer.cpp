@@ -77,7 +77,7 @@ static sk_sp<GrPath> get_gr_path(GrResourceProvider* resourceProvider, const GrS
 
 void GrStencilAndCoverPathRenderer::onStencilPath(const StencilPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrStencilAndCoverPathRenderer::onStencilPath");
+                              "GrStencilAndCoverPathRenderer::onStencilPath")
     sk_sp<GrPath> p(get_gr_path(fResourceProvider, *args.fShape));
     args.fRenderTargetContext->priv().stencilPath(*args.fClip, args.fAAType,
                                                   *args.fViewMatrix, p.get());
@@ -85,7 +85,7 @@ void GrStencilAndCoverPathRenderer::onStencilPath(const StencilPathArgs& args) {
 
 bool GrStencilAndCoverPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrStencilAndCoverPathRenderer::onDrawPath");
+                              "GrStencilAndCoverPathRenderer::onDrawPath")
     SkASSERT(!args.fShape->style().strokeRec().isHairlineStyle());
 
     const SkMatrix& viewMatrix = *args.fViewMatrix;

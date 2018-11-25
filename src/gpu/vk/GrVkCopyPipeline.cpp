@@ -177,7 +177,7 @@ GrVkCopyPipeline* GrVkCopyPipeline::Create(GrVkGpu* gpu,
     VkResult err = GR_VK_CALL(gpu->vkInterface(), CreateGraphicsPipelines(gpu->device(),
                                                                           cache, 1,
                                                                           &pipelineCreateInfo,
-                                                                          nullptr, &vkPipeline));
+                                                                          nullptr, &vkPipeline))
     if (err) {
         SkDebugf("Failed to create copy pipeline. Error: %d\n", err);
         return nullptr;

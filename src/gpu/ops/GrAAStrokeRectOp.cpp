@@ -323,7 +323,7 @@ sk_sp<const GrBuffer> AAStrokeRectOp::GetIndexBuffer(GrResourceProvider* resourc
         };
         // clang-format on
         GR_STATIC_ASSERT(SK_ARRAY_COUNT(gMiterIndices) == kMiterIndexCnt);
-        GR_DEFINE_STATIC_UNIQUE_KEY(gMiterIndexBufferKey);
+        GR_DEFINE_STATIC_UNIQUE_KEY(gMiterIndexBufferKey)
         return resourceProvider->findOrCreatePatternedIndexBuffer(
                 gMiterIndices, kMiterIndexCnt, kNumMiterRectsInIndexBuffer, kMiterVertexCnt,
                 gMiterIndexBufferKey);
@@ -388,7 +388,7 @@ sk_sp<const GrBuffer> AAStrokeRectOp::GetIndexBuffer(GrResourceProvider* resourc
         // clang-format on
         GR_STATIC_ASSERT(SK_ARRAY_COUNT(gBevelIndices) == kBevelIndexCnt);
 
-        GR_DEFINE_STATIC_UNIQUE_KEY(gBevelIndexBufferKey);
+        GR_DEFINE_STATIC_UNIQUE_KEY(gBevelIndexBufferKey)
         return resourceProvider->findOrCreatePatternedIndexBuffer(
                 gBevelIndices, kBevelIndexCnt, kNumBevelRectsInIndexBuffer, kBevelVertexCnt,
                 gBevelIndexBufferKey);

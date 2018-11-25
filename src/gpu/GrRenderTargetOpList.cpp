@@ -330,7 +330,7 @@ void GrRenderTargetOpList::recordOp(std::unique_ptr<GrOp> op,
     // 1) check every op
     // 2) intersect with something
     // 3) find a 'blocker'
-    GR_AUDIT_TRAIL_ADD_OP(fAuditTrail, op.get(), fTarget.get()->uniqueID());
+    GR_AUDIT_TRAIL_ADD_OP(fAuditTrail, op.get(), fTarget.get()->uniqueID())
     GrOP_INFO("opList: %d Recording (%s, opID: %u)\n"
               "\tBounds [L: %.2f, T: %.2f R: %.2f B: %.2f]\n",
                this->uniqueID(),
@@ -352,7 +352,7 @@ void GrRenderTargetOpList::recordOp(std::unique_ptr<GrOp> op,
                           candidate.fOp->uniqueID());
                 GrOP_INFO("\t\t\tBackward: Combined op info:\n");
                 GrOP_INFO(SkTabString(candidate.fOp->dumpInfo(), 4).c_str());
-                GR_AUDIT_TRAIL_OPS_RESULT_COMBINED(fAuditTrail, candidate.fOp.get(), op.get());
+                GR_AUDIT_TRAIL_OPS_RESULT_COMBINED(fAuditTrail, candidate.fOp.get(), op.get())
                 return;
             }
             // Stop going backwards if we would cause a painter's order violation.
@@ -397,7 +397,7 @@ void GrRenderTargetOpList::forwardCombine(const GrCaps& caps) {
                 GrOP_INFO("\t\t%d: (%s opID: %u) -> Combining with (%s, opID: %u)\n",
                           i, op->name(), op->uniqueID(),
                           candidate.fOp->name(), candidate.fOp->uniqueID());
-                GR_AUDIT_TRAIL_OPS_RESULT_COMBINED(fAuditTrail, op, candidate.fOp.get());
+                GR_AUDIT_TRAIL_OPS_RESULT_COMBINED(fAuditTrail, op, candidate.fOp.get())
                 fRecordedOps[j].fOp = std::move(fRecordedOps[i].fOp);
                 break;
             }

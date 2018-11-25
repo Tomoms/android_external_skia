@@ -78,10 +78,10 @@ void GrVkCaps::init(const GrContextOptions& contextOptions, const GrVkInterface*
                     VkPhysicalDevice physDev, uint32_t featureFlags, uint32_t extensionFlags) {
 
     VkPhysicalDeviceProperties properties;
-    GR_VK_CALL(vkInterface, GetPhysicalDeviceProperties(physDev, &properties));
+    GR_VK_CALL(vkInterface, GetPhysicalDeviceProperties(physDev, &properties))
 
     VkPhysicalDeviceMemoryProperties memoryProperties;
-    GR_VK_CALL(vkInterface, GetPhysicalDeviceMemoryProperties(physDev, &memoryProperties));
+    GR_VK_CALL(vkInterface, GetPhysicalDeviceMemoryProperties(physDev, &memoryProperties))
 
     this->initGrCaps(properties, memoryProperties, featureFlags);
     this->initShaderCaps(properties, featureFlags);
@@ -290,7 +290,7 @@ bool stencil_format_supported(const GrVkInterface* interface,
                               VkFormat format) {
     VkFormatProperties props;
     memset(&props, 0, sizeof(VkFormatProperties));
-    GR_VK_CALL(interface, GetPhysicalDeviceFormatProperties(physDev, format, &props));
+    GR_VK_CALL(interface, GetPhysicalDeviceFormatProperties(physDev, format, &props))
     return SkToBool(VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT & props.optimalTilingFeatures);
 }
 
@@ -364,7 +364,7 @@ void GrVkCaps::ConfigInfo::initSampleCounts(const GrVkInterface* interface,
                                                                  VK_IMAGE_TILING_OPTIMAL,
                                                                  usage,
                                                                  createFlags,
-                                                                 &properties));
+                                                                 &properties))
     VkSampleCountFlags flags = properties.sampleCounts;
     if (flags & VK_SAMPLE_COUNT_1_BIT) {
         fColorSampleCounts.push(1);
@@ -399,7 +399,7 @@ void GrVkCaps::ConfigInfo::init(const GrVkInterface* interface,
                                 VkFormat format) {
     VkFormatProperties props;
     memset(&props, 0, sizeof(VkFormatProperties));
-    GR_VK_CALL(interface, GetPhysicalDeviceFormatProperties(physDev, format, &props));
+    GR_VK_CALL(interface, GetPhysicalDeviceFormatProperties(physDev, format, &props))
     InitConfigFlags(props.linearTilingFeatures, &fLinearFlags);
     InitConfigFlags(props.optimalTilingFeatures, &fOptimalFlags);
     if (fOptimalFlags & kRenderable_Flag) {

@@ -59,7 +59,7 @@ const GrVkResource* GrVkUniformBuffer::CreateResource(GrVkGpu* gpu, size_t size)
     bufInfo.pQueueFamilyIndices = nullptr;
 
     VkResult err;
-    err = VK_CALL(gpu, CreateBuffer(gpu->device(), &bufInfo, nullptr, &buffer));
+    err = VK_CALL(gpu, CreateBuffer(gpu->device(), &bufInfo, nullptr, &buffer))
     if (err) {
         return nullptr;
     }
@@ -74,7 +74,7 @@ const GrVkResource* GrVkUniformBuffer::CreateResource(GrVkGpu* gpu, size_t size)
 
     const GrVkResource* resource = new GrVkUniformBuffer::Resource(buffer, alloc);
     if (!resource) {
-        VK_CALL(gpu, DestroyBuffer(gpu->device(), buffer, nullptr));
+        VK_CALL(gpu, DestroyBuffer(gpu->device(), buffer, nullptr))
         GrVkMemory::FreeBufferMemory(gpu, kUniform_Type, alloc);
         return nullptr;
     }

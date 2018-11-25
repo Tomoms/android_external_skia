@@ -357,12 +357,12 @@ bool GrGLInterface::validate() const {
     if (kGL_GrGLStandard == fStandard) {
         if (glVer >= GR_GL_VER(3,1)) {
             if (!fFunctions.fTexBuffer) {
-                RETURN_FALSE_INTERFACE;
+                RETURN_FALSE_INTERFACE
             }
         }
         if (glVer >= GR_GL_VER(4,3)) {
             if (!fFunctions.fTexBufferRange) {
-                RETURN_FALSE_INTERFACE;
+                RETURN_FALSE_INTERFACE
             }
         }
     } else {
@@ -370,7 +370,7 @@ bool GrGLInterface::validate() const {
             fExtensions.has("GL_EXT_texture_buffer")) {
             if (!fFunctions.fTexBuffer ||
                 !fFunctions.fTexBufferRange) {
-                RETURN_FALSE_INTERFACE;
+                RETURN_FALSE_INTERFACE
             }
         }
     }
@@ -409,13 +409,13 @@ bool GrGLInterface::validate() const {
             !fFunctions.fInvalidateSubFramebuffer ||
             !fFunctions.fInvalidateTexImage ||
             !fFunctions.fInvalidateTexSubImage) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     } else if (kGLES_GrGLStandard == fStandard && glVer >= GR_GL_VER(3,0)) {
         // ES 3.0 adds the framebuffer functions but not the others.
         if (!fFunctions.fInvalidateFramebuffer ||
             !fFunctions.fInvalidateSubFramebuffer) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 
@@ -424,7 +424,7 @@ bool GrGLInterface::validate() const {
             !fFunctions.fMapTexSubImage2D ||
             !fFunctions.fUnmapBufferSubData ||
             !fFunctions.fUnmapTexSubImage2D) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 
@@ -434,7 +434,7 @@ bool GrGLInterface::validate() const {
         (kGL_GrGLStandard == fStandard && fExtensions.has("GL_ARB_map_buffer_range"))) {
         if (!fFunctions.fMapBufferRange ||
             !fFunctions.fFlushMappedBufferRange) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 
@@ -624,7 +624,7 @@ bool GrGLInterface::validate() const {
     // glDrawRangeElements was added to ES in 3.0.
     if (kGL_GrGLStandard == fStandard || glVer >= GR_GL_VER(3,0)) {
         if (!fFunctions.fDrawRangeElements) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 
@@ -633,7 +633,7 @@ bool GrGLInterface::validate() const {
          (glVer >= GR_GL_VER(4,2) || fExtensions.has("GL_ARB_internalformat_query"))) ||
         (kGLES_GrGLStandard == fStandard && glVer >= GR_GL_VER(3,0))) {
         if (!fFunctions.fGetInternalformativ) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 
@@ -642,7 +642,7 @@ bool GrGLInterface::validate() const {
         if (!fFunctions.fGetProgramBinary ||
             !fFunctions.fProgramBinary ||
             !fFunctions.fProgramParameteri) {
-            RETURN_FALSE_INTERFACE;
+            RETURN_FALSE_INTERFACE
         }
     }
 

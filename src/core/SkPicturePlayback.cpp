@@ -49,7 +49,7 @@ DrawType SkPicturePlayback::ReadOpAndSize(SkReadBuffer* reader, uint32_t* size) 
         op = temp;
         *size = 0;
     } else {
-        UNPACK_8_24(temp, op, *size);
+        UNPACK_8_24(temp, op, *size)
         if (MASK_24 == *size) {
             *size = reader->readInt();
         }
@@ -165,7 +165,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             bool doAA = ClipParams_unpackDoAA(packed);
             size_t offsetToRestore = reader->readInt();
             validate_offsetToRestore(reader, offsetToRestore);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->clipPath(path, clipOp, doAA);
             if (canvas->isClipEmpty() && offsetToRestore) {
@@ -179,7 +179,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkClipOp clipOp = ClipParams_unpackRegionOp(reader, packed);
             size_t offsetToRestore = reader->readInt();
             validate_offsetToRestore(reader, offsetToRestore);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->clipRegion(region, clipOp);
             if (canvas->isClipEmpty() && offsetToRestore) {
@@ -194,7 +194,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             bool doAA = ClipParams_unpackDoAA(packed);
             size_t offsetToRestore = reader->readInt();
             validate_offsetToRestore(reader, offsetToRestore);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->clipRect(rect, clipOp, doAA);
             if (canvas->isClipEmpty() && offsetToRestore) {
@@ -209,7 +209,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             bool doAA = ClipParams_unpackDoAA(packed);
             size_t offsetToRestore = reader->readInt();
             validate_offsetToRestore(reader, offsetToRestore);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->clipRRect(rrect, clipOp, doAA);
             if (canvas->isClipEmpty() && offsetToRestore) {
@@ -221,7 +221,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
         case CONCAT: {
             SkMatrix matrix;
             reader->readMatrix(&matrix);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->concat(matrix);
             break;
@@ -232,7 +232,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkString key;
             reader->readString(&key);
             sk_sp<SkData> data = reader->readByteArrayAsData();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawAnnotation(rect, key.c_str(), data.get());
         } break;
@@ -243,7 +243,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkScalar startAngle = reader->readScalar();
             SkScalar sweepAngle = reader->readScalar();
             int useCenter = reader->readInt();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawArc(rect, startAngle, sweepAngle, SkToBool(useCenter), *paint);
@@ -266,7 +266,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             if (flags & DRAW_ATLAS_HAS_CULL) {
                 cull = (const SkRect*)reader->skip(sizeof(SkRect));
             }
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawAtlas(atlas, xform, tex, colors, count, mode, cull, paint);
         } break;
@@ -275,7 +275,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkImage* image = fPictureData->getBitmapAsImage(reader);
             SkPoint loc;
             reader->readPoint(&loc);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawImage(image, loc.fX, loc.fY, paint);
         } break;
@@ -287,7 +287,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkRect dst;
             reader->readRect(&dst);     // required
             SkCanvas::SrcRectConstraint constraint = (SkCanvas::SrcRectConstraint)reader->readInt();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (src) {
                 canvas->drawImageRect(image, *src, dst, paint, constraint);
@@ -300,7 +300,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkImage* image = fPictureData->getBitmapAsImage(reader);
             SkMatrix matrix;
             reader->readMatrix(&matrix);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             SkAutoCanvasRestore acr(canvas, true);
             canvas->concat(matrix);
@@ -313,13 +313,13 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             reader->readIRect(&src);
             SkRect dst;
             reader->readRect(&dst);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawImageNine(image, src, dst, paint);
         } break;
         case DRAW_CLEAR: {
             auto c = reader->readInt();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->clear(c);
         } break;
@@ -331,7 +331,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
         } break;
         case DRAW_DRAWABLE: {
             auto* d = fPictureData->getDrawable(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawDrawable(d);
         } break;
@@ -339,7 +339,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkMatrix matrix;
             reader->readMatrix(&matrix);
             SkDrawable* drawable = fPictureData->getDrawable(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawDrawable(drawable, &matrix);
         } break;
@@ -348,7 +348,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkRRect outer, inner;
             reader->readRRect(&outer);
             reader->readRRect(&inner);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawDRRect(outer, inner, *paint);
@@ -359,7 +359,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkImage* image = fPictureData->getImage(reader);
             SkPoint loc;
             reader->readPoint(&loc);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawImage(image, loc.fX, loc.fY, paint);
         } break;
@@ -369,7 +369,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkCanvas::Lattice lattice;
             (void)SkCanvasPriv::ReadLattice(*reader, &lattice);
             const SkRect* dst = reader->skipT<SkRect>();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawImageLattice(image, lattice, *dst, paint);
         } break;
@@ -380,7 +380,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             reader->readIRect(&center);
             SkRect dst;
             reader->readRect(&dst);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawImageNine(image, center, dst, paint);
         } break;
@@ -397,7 +397,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
                 // newer op-code stores the constraint explicitly
                 constraint = (SkCanvas::SrcRectConstraint)reader->readInt();
             }
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->legacy_drawImageRect(image, src, dst, paint, constraint);
         } break;
@@ -405,7 +405,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             SkRect rect;
             reader->readRect(&rect);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawOval(rect, *paint);
@@ -413,7 +413,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
         } break;
         case DRAW_PAINT: {
             const SkPaint* paint = fPictureData->getPaint(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawPaint(*paint);
@@ -449,7 +449,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
                     bmode = (SkBlendMode)mode;
                 }
             }
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawPatch(cubics, colors, texCoords, bmode, *paint);
@@ -458,7 +458,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
         case DRAW_PATH: {
             const SkPaint* paint = fPictureData->getPaint(reader);
             const auto& path = fPictureData->getPath(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawPath(path, *paint);
@@ -466,7 +466,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
         } break;
         case DRAW_PICTURE: {
             const auto* pic = fPictureData->getPicture(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawPicture(pic);
         } break;
@@ -475,7 +475,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkMatrix matrix;
             reader->readMatrix(&matrix);
             const SkPicture* pic = fPictureData->getPicture(reader);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->drawPicture(pic, &matrix, paint);
         } break;
@@ -484,7 +484,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             SkCanvas::PointMode mode = (SkCanvas::PointMode)reader->readInt();
             size_t count = reader->readInt();
             const SkPoint* pts = (const SkPoint*)reader->skip(count, sizeof(SkPoint));
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawPoints(mode, count, pts, *paint);
@@ -496,7 +496,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             size_t points = reader->readInt();
             reader->validate(points == text.count());
             const SkPoint* pos = (const SkPoint*)reader->skip(points, sizeof(SkPoint));
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint && text.text()) {
                 canvas->drawPosText(text.text(), text.length(), pos, *paint);
@@ -510,7 +510,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPoint* pos = (const SkPoint*)reader->skip(points, sizeof(SkPoint));
             const SkScalar top = reader->readScalar();
             const SkScalar bottom = reader->readScalar();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             SkRect clip = canvas->getLocalClipBounds();
             if (top < clip.fBottom && bottom > clip.fTop && paint && text.text()) {
@@ -524,7 +524,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             reader->validate(xCount == text.count());
             const SkScalar constY = reader->readScalar();
             const SkScalar* xpos = (const SkScalar*)reader->skip(xCount, sizeof(SkScalar));
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint && text.text()) {
                 canvas->drawPosTextH(text.text(), text.length(), xpos, constY, *paint);
@@ -537,7 +537,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             reader->validate(xCount == text.count());
             const SkScalar* xpos = (const SkScalar*)reader->skip(SkSafeMath::Add(3, xCount),
                                                                  sizeof(SkScalar));
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             const SkScalar top = *xpos++;
             const SkScalar bottom = *xpos++;
@@ -551,7 +551,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             SkRect rect;
             reader->readRect(&rect);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawRect(rect, *paint);
@@ -561,7 +561,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             SkRegion region;
             reader->readRegion(&region);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawRegion(region, *paint);
@@ -571,7 +571,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             SkRRect rrect;
             reader->readRRect(&rrect);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawRRect(rrect, *paint);
@@ -594,7 +594,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
                 rec.fSpotColor = reader->read32();
             }
             rec.fFlags = reader->read32();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->private_draw_shadow_rec(path, rec);
         } break;
@@ -610,7 +610,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             TextContainer text(reader, paint);
             SkScalar x = reader->readScalar();
             SkScalar y = reader->readScalar();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint && text.text()) {
                 canvas->drawText(text.text(), text.length(), x, y, *paint);
@@ -621,7 +621,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkTextBlob* blob = fPictureData->getTextBlob(reader);
             SkScalar x = reader->readScalar();
             SkScalar y = reader->readScalar();
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint) {
                 canvas->drawTextBlob(blob, x, y, *paint);
@@ -631,7 +631,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             TextContainer text(reader, paint);
             const SkScalar* ptr = (const SkScalar*)reader->skip(4 * sizeof(SkScalar));
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             // ptr[0] == x
             // ptr[1] == y
@@ -650,7 +650,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPath& path = fPictureData->getPath(reader);
             SkMatrix matrix;
             reader->readMatrix(&matrix);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint && text.text()) {
                 canvas->drawTextOnPath(text.text(), text.length(), path, &matrix, *paint);
@@ -667,7 +667,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
                 cull = (const SkRect*)reader->skip(sizeof(SkRect));
             }
             reader->validate(count == text.count());
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (text.text()) {
                 canvas->drawTextRSXform(text.text(), text.length(), xform, cull, *paint);
@@ -677,7 +677,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkPaint* paint = fPictureData->getPaint(reader);
             const SkVertices* vertices = fPictureData->getVertices(reader);
             SkBlendMode bmode = reader->read32LE(SkBlendMode::kLastMode);
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             if (paint && vertices) {
                 canvas->drawVertices(vertices, bmode, *paint);
@@ -708,7 +708,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
             const SkRect* boundsPtr = get_rect_ptr(reader, &storage);
             const SkPaint* paint = fPictureData->getPaint(reader);
             auto flags = SkCanvas::LegacySaveFlagsToSaveLayerFlags(reader->readInt());
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->saveLayer(SkCanvas::SaveLayerRec(boundsPtr, paint, flags));
         } break;
@@ -739,7 +739,7 @@ void SkPicturePlayback::handleOp(SkReadBuffer* reader,
                 reader->readMatrix(&clipMatrix);
                 rec.fClipMatrix = &clipMatrix;
             }
-            BREAK_ON_READ_ERROR(reader);
+            BREAK_ON_READ_ERROR(reader)
 
             canvas->saveLayer(rec);
         } break;

@@ -125,7 +125,7 @@ void GrVkPipelineState::freeGPUResources(const GrVkGpu* gpu) {
     if (fPipelineLayout) {
         GR_VK_CALL(gpu->vkInterface(), DestroyPipelineLayout(gpu->device(),
                                                              fPipelineLayout,
-                                                             nullptr));
+                                                             nullptr))
         fPipelineLayout = VK_NULL_HANDLE;
     }
 
@@ -366,7 +366,7 @@ void GrVkPipelineState::writeUniformBuffers(const GrVkGpu* gpu) {
         GR_VK_CALL(gpu->vkInterface(), UpdateDescriptorSets(gpu->device(),
                                                             writeCount,
                                                             descriptorWrites,
-                                                            0, nullptr));
+                                                            0, nullptr))
     }
 }
 
@@ -415,7 +415,7 @@ void GrVkPipelineState::writeSamplers(
                                                             1,
                                                             &writeInfo,
                                                             0,
-                                                            nullptr));
+                                                            nullptr))
     }
 }
 
@@ -458,7 +458,7 @@ void GrVkPipelineState::writeTexelBuffers(
                                                             1,
                                                             &writeInfo,
                                                             0,
-                                                            nullptr));
+                                                            nullptr))
     }
 }
 

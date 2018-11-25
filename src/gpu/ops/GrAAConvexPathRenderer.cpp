@@ -320,7 +320,7 @@ static bool get_segments(const SkPath& path,
                 update_degenerate_test(&degenerateData, pts[3]);
                 add_cubic_segments(pts, dir, segments);
                 break;
-            };
+            }
             case SkPath::kDone_Verb:
                 if (degenerateData.isDegenerate()) {
                     return false;
@@ -961,7 +961,7 @@ private:
 
 bool GrAAConvexPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrAAConvexPathRenderer::onDrawPath");
+                              "GrAAConvexPathRenderer::onDrawPath")
     SkASSERT(GrFSAAType::kUnifiedMSAA != args.fRenderTargetContext->fsaaType());
     SkASSERT(!args.fShape->isEmpty());
 

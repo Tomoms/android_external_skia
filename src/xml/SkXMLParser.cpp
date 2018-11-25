@@ -87,7 +87,7 @@ private:
 #define HANDLER_CONTEXT(arg, name) ParsingContext* name = static_cast<ParsingContext*>(arg);
 
 void XMLCALL start_element_handler(void *data, const char* tag, const char** attributes) {
-    HANDLER_CONTEXT(data, ctx);
+    HANDLER_CONTEXT(data, ctx)
     ctx->flushText();
 
     ctx->fParser->startElement(tag);
@@ -98,14 +98,14 @@ void XMLCALL start_element_handler(void *data, const char* tag, const char** att
 }
 
 void XMLCALL end_element_handler(void* data, const char* tag) {
-    HANDLER_CONTEXT(data, ctx);
+    HANDLER_CONTEXT(data, ctx)
     ctx->flushText();
 
     ctx->fParser->endElement(tag);
 }
 
 void XMLCALL text_handler(void *data, const char* txt, int len) {
-    HANDLER_CONTEXT(data, ctx);
+    HANDLER_CONTEXT(data, ctx)
 
     ctx->appendText(txt, SkTo<size_t>(len));
 }
@@ -119,7 +119,7 @@ void XMLCALL entity_decl_handler(void *data,
                                  const XML_Char *systemId,
                                  const XML_Char *publicId,
                                  const XML_Char *notationName) {
-    HANDLER_CONTEXT(data, ctx);
+    HANDLER_CONTEXT(data, ctx)
 
     SkDebugf("'%s' entity declaration found, stopping processing", entityName);
     XML_StopParser(ctx->fXMLParser, XML_FALSE);

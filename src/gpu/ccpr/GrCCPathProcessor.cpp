@@ -37,7 +37,7 @@ static constexpr float kOctoEdgeNorms[8 * 4] = {
 GR_DECLARE_STATIC_UNIQUE_KEY(gVertexBufferKey);
 
 sk_sp<const GrBuffer> GrCCPathProcessor::FindVertexBuffer(GrOnFlushResourceProvider* onFlushRP) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gVertexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gVertexBufferKey)
     return onFlushRP->findOrMakeStaticBuffer(kVertex_GrBufferType, sizeof(kOctoEdgeNorms),
                                              kOctoEdgeNorms, gVertexBufferKey);
 }
@@ -64,7 +64,7 @@ static constexpr uint16_t kOctoIndicesAsTris[] = {
 GR_DECLARE_STATIC_UNIQUE_KEY(gIndexBufferKey);
 
 sk_sp<const GrBuffer> GrCCPathProcessor::FindIndexBuffer(GrOnFlushResourceProvider* onFlushRP) {
-    GR_DEFINE_STATIC_UNIQUE_KEY(gIndexBufferKey);
+    GR_DEFINE_STATIC_UNIQUE_KEY(gIndexBufferKey)
     if (onFlushRP->caps()->usePrimitiveRestart()) {
         return onFlushRP->findOrMakeStaticBuffer(kIndex_GrBufferType, sizeof(kOctoIndicesAsStrips),
                                                  kOctoIndicesAsStrips, gIndexBufferKey);

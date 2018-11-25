@@ -784,7 +784,7 @@ private:
 
 bool GrSmallPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrSmallPathRenderer::onDrawPath");
+                              "GrSmallPathRenderer::onDrawPath")
 
     // we've already bailed on inverse filled paths, so this is safe
     SkASSERT(!args.fShape->isEmpty());

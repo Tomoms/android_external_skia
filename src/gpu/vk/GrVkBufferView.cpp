@@ -25,7 +25,7 @@ const GrVkBufferView* GrVkBufferView::Create(const GrVkGpu* gpu, VkBuffer buffer
     viewInfo.range = range;
 
     VkResult err = GR_VK_CALL(gpu->vkInterface(), CreateBufferView(gpu->device(), &viewInfo,
-                                                                   nullptr, &bufferView));
+                                                                   nullptr, &bufferView))
     if (err) {
         return nullptr;
     }
@@ -34,5 +34,5 @@ const GrVkBufferView* GrVkBufferView::Create(const GrVkGpu* gpu, VkBuffer buffer
 }
 
 void GrVkBufferView::freeGPUData(const GrVkGpu* gpu) const {
-    GR_VK_CALL(gpu->vkInterface(), DestroyBufferView(gpu->device(), fBufferView, nullptr));
+    GR_VK_CALL(gpu->vkInterface(), DestroyBufferView(gpu->device(), fBufferView, nullptr))
 }

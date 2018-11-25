@@ -124,20 +124,20 @@ static void fill_caps(const SKSL_CAPS_CLASS& caps,
                       std::unordered_map<String, Program::Settings::Value>* capsMap) {
 #define CAP(name) capsMap->insert(std::make_pair(String(#name), \
                                   Program::Settings::Value(caps.name())));
-    CAP(fbFetchSupport);
-    CAP(fbFetchNeedsCustomOutput);
-    CAP(dropsTileOnZeroDivide);
-    CAP(flatInterpolationSupport);
-    CAP(noperspectiveInterpolationSupport);
-    CAP(externalTextureSupport);
-    CAP(texelFetchSupport);
-    CAP(imageLoadStoreSupport);
-    CAP(mustEnableAdvBlendEqs);
-    CAP(mustEnableSpecificAdvBlendEqs);
-    CAP(mustDeclareFragmentShaderOutput);
-    CAP(canUseAnyFunctionInShader);
-    CAP(floatIs32Bits);
-    CAP(integerSupport);
+    CAP(fbFetchSupport)
+    CAP(fbFetchNeedsCustomOutput)
+    CAP(dropsTileOnZeroDivide)
+    CAP(flatInterpolationSupport)
+    CAP(noperspectiveInterpolationSupport)
+    CAP(externalTextureSupport)
+    CAP(texelFetchSupport)
+    CAP(imageLoadStoreSupport)
+    CAP(mustEnableAdvBlendEqs)
+    CAP(mustEnableSpecificAdvBlendEqs)
+    CAP(mustDeclareFragmentShaderOutput)
+    CAP(canUseAnyFunctionInShader)
+    CAP(floatIs32Bits)
+    CAP(integerSupport)
 #undef CAP
 }
 
@@ -1126,9 +1126,9 @@ static bool determine_binary_type(const Context& context,
                                           right.componentType(), outLeftType, outRightType,
                                           outResultType, false)) {
                     *outLeftType = &(*outResultType)->toCompound(context, left.columns(),
-                                                                 left.rows());;
+                                                                 left.rows());
                     *outRightType = &(*outResultType)->toCompound(context, right.columns(),
-                                                                  right.rows());;
+                                                                  right.rows());
                     int leftColumns = left.columns();
                     int leftRows = left.rows();
                     int rightColumns;
@@ -1336,10 +1336,10 @@ std::unique_ptr<Expression> IRGenerator::constantFold(const Expression& left,
             case Token::NEQ:
                 return std::unique_ptr<Expression>(new BoolLiteral(fContext, -1,
                                                            !left.compareConstant(fContext, right)));
-            case Token::PLUS:  RETURN_VEC_COMPONENTWISE_RESULT(+);
-            case Token::MINUS: RETURN_VEC_COMPONENTWISE_RESULT(-);
-            case Token::STAR:  RETURN_VEC_COMPONENTWISE_RESULT(*);
-            case Token::SLASH: RETURN_VEC_COMPONENTWISE_RESULT(/);
+            case Token::PLUS:  RETURN_VEC_COMPONENTWISE_RESULT(+)
+            case Token::MINUS: RETURN_VEC_COMPONENTWISE_RESULT(-)
+            case Token::STAR:  RETURN_VEC_COMPONENTWISE_RESULT(*)
+            case Token::SLASH: RETURN_VEC_COMPONENTWISE_RESULT(/)
             default:           return nullptr;
         }
     }

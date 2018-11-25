@@ -33,7 +33,7 @@ GrVkDescriptorPool::GrVkDescriptorPool(const GrVkGpu* gpu, VkDescriptorType type
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), CreateDescriptorPool(gpu->device(),
                                                                  &createInfo,
                                                                  nullptr,
-                                                                 &fDescPool));
+                                                                 &fDescPool))
 }
 
 bool GrVkDescriptorPool::isCompatible(VkDescriptorType type, uint32_t count) const {
@@ -41,11 +41,11 @@ bool GrVkDescriptorPool::isCompatible(VkDescriptorType type, uint32_t count) con
 }
 
 void GrVkDescriptorPool::reset(const GrVkGpu* gpu) {
-    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), ResetDescriptorPool(gpu->device(), fDescPool, 0));
+    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), ResetDescriptorPool(gpu->device(), fDescPool, 0))
 }
 
 void GrVkDescriptorPool::freeGPUData(const GrVkGpu* gpu) const {
     // Destroying the VkDescriptorPool will automatically free and delete any VkDescriptorSets
     // allocated from the pool.
-    GR_VK_CALL(gpu->vkInterface(), DestroyDescriptorPool(gpu->device(), fDescPool, nullptr));
+    GR_VK_CALL(gpu->vkInterface(), DestroyDescriptorPool(gpu->device(), fDescPool, nullptr))
 }

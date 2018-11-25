@@ -32,7 +32,7 @@ const GrVkImageView* GrVkImageView::Create(const GrVkGpu* gpu, VkImage image, Vk
     }
 
     VkResult err = GR_VK_CALL(gpu->vkInterface(), CreateImageView(gpu->device(), &viewInfo,
-                                                                  nullptr, &imageView));
+                                                                  nullptr, &imageView))
     if (err) {
         return nullptr;
     }
@@ -41,5 +41,5 @@ const GrVkImageView* GrVkImageView::Create(const GrVkGpu* gpu, VkImage image, Vk
 }
 
 void GrVkImageView::freeGPUData(const GrVkGpu* gpu) const {
-    GR_VK_CALL(gpu->vkInterface(), DestroyImageView(gpu->device(), fImageView, nullptr));
+    GR_VK_CALL(gpu->vkInterface(), DestroyImageView(gpu->device(), fImageView, nullptr))
 }

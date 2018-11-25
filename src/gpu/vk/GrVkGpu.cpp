@@ -130,8 +130,8 @@ GrVkGpu::GrVkGpu(GrContext* context, const GrContextOptions& options,
                                fBackendContext->fFeatures, fBackendContext->fExtensions));
     fCaps.reset(SkRef(fVkCaps.get()));
 
-    VK_CALL(GetPhysicalDeviceProperties(fBackendContext->fPhysicalDevice, &fPhysDevProps));
-    VK_CALL(GetPhysicalDeviceMemoryProperties(fBackendContext->fPhysicalDevice, &fPhysDevMemProps));
+    VK_CALL(GetPhysicalDeviceProperties(fBackendContext->fPhysicalDevice, &fPhysDevProps))
+    VK_CALL(GetPhysicalDeviceMemoryProperties(fBackendContext->fPhysicalDevice, &fPhysDevMemProps))
 
     const VkCommandPoolCreateInfo cmdPoolInfo = {
         VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,      // sType
@@ -141,7 +141,7 @@ GrVkGpu::GrVkGpu(GrContext* context, const GrContextOptions& options,
         fBackendContext->fGraphicsQueueIndex,            // queueFamilyIndex
     };
     GR_VK_CALL_ERRCHECK(this->vkInterface(), CreateCommandPool(fDevice, &cmdPoolInfo, nullptr,
-                                                               &fCmdPool));
+                                                               &fCmdPool))
 
     // must call this after creating the CommandPool
     fResourceProvider.init();
@@ -169,7 +169,7 @@ void GrVkGpu::destroyResources() {
 
     // wait for all commands to finish
     fResourceProvider.checkCommandBuffers();
-    VkResult res = VK_CALL(QueueWaitIdle(fQueue));
+    VkResult res = VK_CALL(QueueWaitIdle(fQueue))
 
     // On windows, sometimes calls to QueueWaitIdle return before actually signalling the fences
     // on the command buffers even though they have completed. This causes an assert to fire when
@@ -206,7 +206,7 @@ void GrVkGpu::destroyResources() {
     fResourceProvider.destroyResources(VK_ERROR_DEVICE_LOST == res);
 
     if (fCmdPool != VK_NULL_HANDLE) {
-        VK_CALL(DestroyCommandPool(fDevice, fCmdPool, nullptr));
+        VK_CALL(DestroyCommandPool(fDevice, fCmdPool, nullptr))
     }
 
 #ifdef SK_ENABLE_VK_LAYERS
@@ -574,7 +574,7 @@ bool GrVkGpu::uploadTexDataLinear(GrVkTexture* tex, GrSurfaceOrigin texOrigin, i
     GR_VK_CALL(interface, GetImageSubresourceLayout(fDevice,
                                                     tex->image(),
                                                     &subres,
-                                                    &layout));
+                                                    &layout))
 
     int texTop = kBottomLeft_GrSurfaceOrigin == texOrigin ? tex->height() - top - height : top;
     const GrVkAlloc& alloc = tex->alloc();
@@ -595,7 +595,7 @@ bool GrVkGpu::uploadTexDataLinear(GrVkTexture* tex, GrSurfaceOrigin texOrigin, i
     SkASSERT(offset >= alloc.fOffset);
     SkASSERT(size <= alloc.fOffset + alloc.fSize);
     void* mapPtr;
-    err = GR_VK_CALL(interface, MapMemory(fDevice, alloc.fMemory, offset, size, 0, &mapPtr));
+    err = GR_VK_CALL(interface, MapMemory(fDevice, alloc.fMemory, offset, size, 0, &mapPtr))
     if (err) {
         return false;
     }
@@ -616,7 +616,7 @@ bool GrVkGpu::uploadTexDataLinear(GrVkTexture* tex, GrSurfaceOrigin texOrigin, i
     }
 
     GrVkMemory::FlushMappedAlloc(this, alloc, offset, size);
-    GR_VK_CALL(interface, UnmapMemory(fDevice, alloc.fMemory));
+    GR_VK_CALL(interface, UnmapMemory(fDevice, alloc.fMemory))
 
     return true;
 }
@@ -1146,7 +1146,7 @@ bool copy_testing_data(GrVkGpu* gpu, void* srcData, const GrVkAlloc& alloc, size
                                                             mapOffset,
                                                             mapSize,
                                                             0,
-                                                            &mapPtr));
+                                                            &mapPtr))
     mapPtr = reinterpret_cast<char*>(mapPtr) + offsetDiff;
     if (err) {
         return false;
@@ -1170,7 +1170,7 @@ bool copy_testing_data(GrVkGpu* gpu, void* srcData, const GrVkAlloc& alloc, size
         }
     }
     GrVkMemory::FlushMappedAlloc(gpu, alloc, mapOffset, mapSize);
-    GR_VK_CALL(gpu->vkInterface(), UnmapMemory(gpu->device(), alloc.fMemory));
+    GR_VK_CALL(gpu->vkInterface(), UnmapMemory(gpu->device(), alloc.fMemory))
     return true;
 }
 
@@ -1249,10 +1249,10 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
         initialLayout                                // initialLayout
     };
 
-    GR_VK_CALL_ERRCHECK(this->vkInterface(), CreateImage(this->device(), &imageCreateInfo, nullptr, &image));
+    GR_VK_CALL_ERRCHECK(this->vkInterface(), CreateImage(this->device(), &imageCreateInfo, nullptr, &image))
 
     if (!GrVkMemory::AllocAndBindImageMemory(this, image, linearTiling, &alloc)) {
-        VK_CALL(DestroyImage(this->device(), image, nullptr));
+        VK_CALL(DestroyImage(this->device(), image, nullptr))
         return GrBackendTexture(); // invalid
     }
 
@@ -1270,10 +1270,10 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
     };
 
     VkCommandBuffer cmdBuffer;
-    err = VK_CALL(AllocateCommandBuffers(fDevice, &cmdInfo, &cmdBuffer));
+    err = VK_CALL(AllocateCommandBuffers(fDevice, &cmdInfo, &cmdBuffer))
     if (err) {
         GrVkMemory::FreeImageMemory(this, false, alloc);
-        VK_CALL(DestroyImage(fDevice, image, nullptr));
+        VK_CALL(DestroyImage(fDevice, image, nullptr))
         return GrBackendTexture(); // invalid
     }
 
@@ -1284,7 +1284,7 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
     cmdBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     cmdBufferBeginInfo.pInheritanceInfo = nullptr;
 
-    err = VK_CALL(BeginCommandBuffer(cmdBuffer, &cmdBufferBeginInfo));
+    err = VK_CALL(BeginCommandBuffer(cmdBuffer, &cmdBufferBeginInfo))
     SkASSERT(!err);
 
     size_t bpp = GrBytesPerPixel(config);
@@ -1297,14 +1297,14 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
         };
         VkSubresourceLayout layout;
 
-        VK_CALL(GetImageSubresourceLayout(fDevice, image, &subres, &layout));
+        VK_CALL(GetImageSubresourceLayout(fDevice, image, &subres, &layout))
 
         if (!copy_testing_data(this, srcData, alloc, 0, rowCopyBytes,
                                static_cast<size_t>(layout.rowPitch), h)) {
             GrVkMemory::FreeImageMemory(this, true, alloc);
-            VK_CALL(DestroyImage(fDevice, image, nullptr));
-            VK_CALL(EndCommandBuffer(cmdBuffer));
-            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
+            VK_CALL(DestroyImage(fDevice, image, nullptr))
+            VK_CALL(EndCommandBuffer(cmdBuffer))
+            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
             return GrBackendTexture(); // invalid
         }
     } else {
@@ -1342,23 +1342,23 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
         bufInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         bufInfo.queueFamilyIndexCount = 0;
         bufInfo.pQueueFamilyIndices = nullptr;
-        err = VK_CALL(CreateBuffer(fDevice, &bufInfo, nullptr, &buffer));
+        err = VK_CALL(CreateBuffer(fDevice, &bufInfo, nullptr, &buffer))
 
         if (err) {
             GrVkMemory::FreeImageMemory(this, false, alloc);
-            VK_CALL(DestroyImage(fDevice, image, nullptr));
-            VK_CALL(EndCommandBuffer(cmdBuffer));
-            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
+            VK_CALL(DestroyImage(fDevice, image, nullptr))
+            VK_CALL(EndCommandBuffer(cmdBuffer))
+            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
             return GrBackendTexture(); // invalid
         }
 
         if (!GrVkMemory::AllocAndBindBufferMemory(this, buffer, GrVkBuffer::kCopyRead_Type,
                                                   true, &bufferAlloc)) {
             GrVkMemory::FreeImageMemory(this, false, alloc);
-            VK_CALL(DestroyImage(fDevice, image, nullptr));
-            VK_CALL(DestroyBuffer(fDevice, buffer, nullptr));
-            VK_CALL(EndCommandBuffer(cmdBuffer));
-            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
+            VK_CALL(DestroyImage(fDevice, image, nullptr))
+            VK_CALL(DestroyBuffer(fDevice, buffer, nullptr))
+            VK_CALL(EndCommandBuffer(cmdBuffer))
+            VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
             return GrBackendTexture(); // invalid
         }
 
@@ -1371,11 +1371,11 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
             if (!copy_testing_data(this, srcData, bufferAlloc, bufferOffset,
                                    currentRowBytes, currentRowBytes, currentHeight)) {
                 GrVkMemory::FreeImageMemory(this, false, alloc);
-                VK_CALL(DestroyImage(fDevice, image, nullptr));
+                VK_CALL(DestroyImage(fDevice, image, nullptr))
                 GrVkMemory::FreeBufferMemory(this, GrVkBuffer::kCopyRead_Type, bufferAlloc);
-                VK_CALL(DestroyBuffer(fDevice, buffer, nullptr));
-                VK_CALL(EndCommandBuffer(cmdBuffer));
-                VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
+                VK_CALL(DestroyBuffer(fDevice, buffer, nullptr))
+                VK_CALL(EndCommandBuffer(cmdBuffer))
+                VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
                 return GrBackendTexture(); // invalid
             }
             currentWidth = SkTMax(1, currentWidth/2);
@@ -1402,7 +1402,7 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
                                    0,
                                    0, nullptr,
                                    0, nullptr,
-                                   1, &barrier));
+                                   1, &barrier))
         initialLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
 
         SkTArray<VkBufferImageCopy> regions(mipLevels);
@@ -1424,7 +1424,7 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
         }
 
         VK_CALL(CmdCopyBufferToImage(cmdBuffer, buffer, image, initialLayout, regions.count(),
-                                     regions.begin()));
+                                     regions.begin()))
     }
     // Change Image layout to shader read since if we use this texture as a borrowed textures within
     // Ganesh we require that its layout be set to that
@@ -1447,10 +1447,10 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
                                0,
                                0, nullptr,
                                0, nullptr,
-                               1, &barrier));
+                               1, &barrier))
 
     // End CommandBuffer
-    err = VK_CALL(EndCommandBuffer(cmdBuffer));
+    err = VK_CALL(EndCommandBuffer(cmdBuffer))
     SkASSERT(!err);
 
     // Create Fence for queue
@@ -1459,7 +1459,7 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
     memset(&fenceInfo, 0, sizeof(VkFenceCreateInfo));
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
 
-    err = VK_CALL(CreateFence(fDevice, &fenceInfo, nullptr, &fence));
+    err = VK_CALL(CreateFence(fDevice, &fenceInfo, nullptr, &fence))
     SkASSERT(!err);
 
     VkSubmitInfo submitInfo;
@@ -1473,17 +1473,17 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
     submitInfo.pCommandBuffers = &cmdBuffer;
     submitInfo.signalSemaphoreCount = 0;
     submitInfo.pSignalSemaphores = nullptr;
-    err = VK_CALL(QueueSubmit(this->queue(), 1, &submitInfo, fence));
+    err = VK_CALL(QueueSubmit(this->queue(), 1, &submitInfo, fence))
     SkASSERT(!err);
 
-    err = VK_CALL(WaitForFences(fDevice, 1, &fence, true, UINT64_MAX));
+    err = VK_CALL(WaitForFences(fDevice, 1, &fence, true, UINT64_MAX))
     if (VK_TIMEOUT == err) {
         GrVkMemory::FreeImageMemory(this, false, alloc);
-        VK_CALL(DestroyImage(fDevice, image, nullptr));
+        VK_CALL(DestroyImage(fDevice, image, nullptr))
         GrVkMemory::FreeBufferMemory(this, GrVkBuffer::kCopyRead_Type, bufferAlloc);
-        VK_CALL(DestroyBuffer(fDevice, buffer, nullptr));
-        VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
-        VK_CALL(DestroyFence(fDevice, fence, nullptr));
+        VK_CALL(DestroyBuffer(fDevice, buffer, nullptr))
+        VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
+        VK_CALL(DestroyFence(fDevice, fence, nullptr))
         SkDebugf("Fence failed to signal: %d\n", err);
         SK_ABORT("failing");
     }
@@ -1492,10 +1492,10 @@ GrBackendTexture GrVkGpu::createTestingOnlyBackendTexture(void* srcData, int w, 
     // Clean up transfer resources
     if (buffer != VK_NULL_HANDLE) { // workaround for an older NVidia driver crash
         GrVkMemory::FreeBufferMemory(this, GrVkBuffer::kCopyRead_Type, bufferAlloc);
-        VK_CALL(DestroyBuffer(fDevice, buffer, nullptr));
+        VK_CALL(DestroyBuffer(fDevice, buffer, nullptr))
     }
-    VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer));
-    VK_CALL(DestroyFence(fDevice, fence, nullptr));
+    VK_CALL(FreeCommandBuffers(fDevice, fCmdPool, 1, &cmdBuffer))
+    VK_CALL(DestroyFence(fDevice, fence, nullptr))
 
 
     GrVkImageInfo info;
@@ -1519,7 +1519,7 @@ bool GrVkGpu::isTestingOnlyBackendTexture(const GrBackendTexture& tex) const {
         memset(&req, 0, sizeof(req));
         GR_VK_CALL(this->vkInterface(), GetImageMemoryRequirements(fDevice,
                                                                    backend->fImage,
-                                                                   &req));
+                                                                   &req))
         // TODO: find a better check
         // This will probably fail with a different driver
         return (req.size > 0) && (req.size <= 8192 * 8192);
@@ -2140,8 +2140,8 @@ GrFence SK_WARN_UNUSED_RESULT GrVkGpu::insertFence() {
     createInfo.flags = 0;
     VkFence fence = VK_NULL_HANDLE;
 
-    VK_CALL_ERRCHECK(CreateFence(this->device(), &createInfo, nullptr, &fence));
-    VK_CALL(QueueSubmit(this->queue(), 0, nullptr, fence));
+    VK_CALL_ERRCHECK(CreateFence(this->device(), &createInfo, nullptr, &fence))
+    VK_CALL(QueueSubmit(this->queue(), 0, nullptr, fence))
 
     GR_STATIC_ASSERT(sizeof(GrFence) >= sizeof(VkFence));
     return (GrFence)fence;
@@ -2150,12 +2150,12 @@ GrFence SK_WARN_UNUSED_RESULT GrVkGpu::insertFence() {
 bool GrVkGpu::waitFence(GrFence fence, uint64_t timeout) {
     SkASSERT(VK_NULL_HANDLE != (VkFence)fence);
 
-    VkResult result = VK_CALL(WaitForFences(this->device(), 1, (VkFence*)&fence, VK_TRUE, timeout));
+    VkResult result = VK_CALL(WaitForFences(this->device(), 1, (VkFence*)&fence, VK_TRUE, timeout))
     return (VK_SUCCESS == result);
 }
 
 void GrVkGpu::deleteFence(GrFence fence) const {
-    VK_CALL(DestroyFence(this->device(), (VkFence)fence, nullptr));
+    VK_CALL(DestroyFence(this->device(), (VkFence)fence, nullptr))
 }
 
 sk_sp<GrSemaphore> SK_WARN_UNUSED_RESULT GrVkGpu::makeSemaphore(bool isOwned) {

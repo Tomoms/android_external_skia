@@ -107,10 +107,10 @@ bool GrVkImage::InitImageInfo(const GrVkGpu* gpu, const ImageDesc& imageDesc, Gr
     };
 
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), CreateImage(gpu->device(), &imageCreateInfo, nullptr,
-                                                        &image));
+                                                        &image))
 
     if (!GrVkMemory::AllocAndBindImageMemory(gpu, image, isLinear, &alloc)) {
-        VK_CALL(gpu, DestroyImage(gpu->device(), image, nullptr));
+        VK_CALL(gpu, DestroyImage(gpu->device(), image, nullptr))
         return false;
     }
 
@@ -124,7 +124,7 @@ bool GrVkImage::InitImageInfo(const GrVkGpu* gpu, const ImageDesc& imageDesc, Gr
 }
 
 void GrVkImage::DestroyImageInfo(const GrVkGpu* gpu, GrVkImageInfo* info) {
-    VK_CALL(gpu, DestroyImage(gpu->device(), info->fImage, nullptr));
+    VK_CALL(gpu, DestroyImage(gpu->device(), info->fImage, nullptr))
     bool isLinear = VK_IMAGE_TILING_LINEAR == info->fImageTiling;
     GrVkMemory::FreeImageMemory(gpu, isLinear, info->fAlloc);
 }
@@ -159,7 +159,7 @@ void GrVkImage::setResourceRelease(sk_sp<GrReleaseProcHelper> releaseHelper) {
 
 void GrVkImage::Resource::freeGPUData(const GrVkGpu* gpu) const {
     SkASSERT(!fReleaseHelper);
-    VK_CALL(gpu, DestroyImage(gpu->device(), fImage, nullptr));
+    VK_CALL(gpu, DestroyImage(gpu->device(), fImage, nullptr))
     bool isLinear = (VK_IMAGE_TILING_LINEAR == fImageTiling);
     GrVkMemory::FreeImageMemory(gpu, isLinear, fAlloc);
 }

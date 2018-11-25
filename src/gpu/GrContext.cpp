@@ -758,7 +758,7 @@ bool GrContextPriv::writeSurfacePixels(GrSurfaceContext* dst, int left, int top,
     RETURN_FALSE_IF_ABANDONED_PRIV
     SkASSERT(dst);
     ASSERT_OWNED_PROXY_PRIV(dst->asSurfaceProxy());
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "writeSurfacePixels", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "writeSurfacePixels", fContext)
 
     if (!dst->asSurfaceProxy()->instantiate(this->resourceProvider())) {
         return false;
@@ -894,7 +894,7 @@ bool GrContextPriv::readSurfacePixels(GrSurfaceContext* src, int left, int top, 
     RETURN_FALSE_IF_ABANDONED_PRIV
     SkASSERT(src);
     ASSERT_OWNED_PROXY_PRIV(src->asSurfaceProxy());
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "readSurfacePixels", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "readSurfacePixels", fContext)
 
     // MDB TODO: delay this instantiation until later in the method
     if (!src->asSurfaceProxy()->instantiate(this->resourceProvider())) {
@@ -1055,7 +1055,7 @@ bool GrContextPriv::writeSurfacePixels2(GrSurfaceContext* dst, int left, int top
     SkASSERT(dst);
     SkASSERT(buffer);
     ASSERT_OWNED_PROXY_PRIV(dst->asSurfaceProxy());
-    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "writeSurfacePixels2", fContext);
+    GR_CREATE_TRACE_MARKER_CONTEXT("GrContextPriv", "writeSurfacePixels2", fContext)
 
     if (GrColorType::kUnknown == srcColorType) {
         return false;

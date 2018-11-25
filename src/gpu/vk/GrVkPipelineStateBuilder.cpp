@@ -128,7 +128,7 @@ GrVkPipelineState* GrVkPipelineStateBuilder::finalize(const GrStencilSettings& s
     GR_VK_CALL_ERRCHECK(fGpu->vkInterface(), CreatePipelineLayout(fGpu->device(),
                                                                   &layoutCreateInfo,
                                                                   nullptr,
-                                                                  &pipelineLayout));
+                                                                  &pipelineLayout))
 
     // We need to enable the following extensions so that the compiler can correctly make spir-v
     // from our glsl shaders.
@@ -179,19 +179,19 @@ GrVkPipelineState* GrVkPipelineStateBuilder::finalize(const GrStencilSettings& s
                                                              renderPass,
                                                              pipelineLayout);
     GR_VK_CALL(fGpu->vkInterface(), DestroyShaderModule(fGpu->device(), vertShaderModule,
-                                                        nullptr));
+                                                        nullptr))
     GR_VK_CALL(fGpu->vkInterface(), DestroyShaderModule(fGpu->device(), fragShaderModule,
-                                                        nullptr));
+                                                        nullptr))
     // This if check should not be needed since calling destroy on a VK_NULL_HANDLE is allowed.
     // However this is causing a crash in certain drivers (e.g. NVidia).
     if (this->primitiveProcessor().willUseGeoShader()) {
         GR_VK_CALL(fGpu->vkInterface(), DestroyShaderModule(fGpu->device(), geomShaderModule,
-                                                            nullptr));
+                                                            nullptr))
     }
 
     if (!pipeline) {
         GR_VK_CALL(fGpu->vkInterface(), DestroyPipelineLayout(fGpu->device(), pipelineLayout,
-                                                              nullptr));
+                                                              nullptr))
         this->cleanupFragmentProcessors();
         return nullptr;
     }

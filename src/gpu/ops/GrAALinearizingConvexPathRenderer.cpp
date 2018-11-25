@@ -334,7 +334,7 @@ private:
 
 bool GrAALinearizingConvexPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrAALinearizingConvexPathRenderer::onDrawPath");
+                              "GrAALinearizingConvexPathRenderer::onDrawPath")
     SkASSERT(GrFSAAType::kUnifiedMSAA != args.fRenderTargetContext->fsaaType());
     SkASSERT(!args.fShape->isEmpty());
     SkASSERT(!args.fShape->style().pathEffect());

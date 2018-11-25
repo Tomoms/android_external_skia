@@ -63,7 +63,7 @@ bool GrVkMemory::AllocAndBindBufferMemory(const GrVkGpu* gpu,
     VkDevice device = gpu->device();
 
     VkMemoryRequirements memReqs;
-    GR_VK_CALL(iface, GetBufferMemoryRequirements(device, buffer, &memReqs));
+    GR_VK_CALL(iface, GetBufferMemoryRequirements(device, buffer, &memReqs))
 
     uint32_t typeIndex = 0;
     uint32_t heapIndex = 0;
@@ -118,7 +118,7 @@ bool GrVkMemory::AllocAndBindBufferMemory(const GrVkGpu* gpu,
 
     // Bind buffer
     VkResult err = GR_VK_CALL(iface, BindBufferMemory(device, buffer,
-                                                      alloc->fMemory, alloc->fOffset));
+                                                      alloc->fMemory, alloc->fOffset))
     if (err) {
         SkASSERT_RELEASE(heap->free(*alloc));
         return false;
@@ -153,7 +153,7 @@ bool GrVkMemory::AllocAndBindImageMemory(const GrVkGpu* gpu,
     VkDevice device = gpu->device();
 
     VkMemoryRequirements memReqs;
-    GR_VK_CALL(iface, GetImageMemoryRequirements(device, image, &memReqs));
+    GR_VK_CALL(iface, GetImageMemoryRequirements(device, image, &memReqs))
 
     uint32_t typeIndex = 0;
     uint32_t heapIndex = 0;
@@ -212,7 +212,7 @@ bool GrVkMemory::AllocAndBindImageMemory(const GrVkGpu* gpu,
 
     // Bind image
     VkResult err = GR_VK_CALL(iface, BindImageMemory(device, image,
-                              alloc->fMemory, alloc->fOffset));
+                              alloc->fMemory, alloc->fOffset))
     if (err) {
         SkASSERT_RELEASE(heap->free(*alloc));
         return false;
@@ -238,7 +238,7 @@ void GrVkMemory::FreeImageMemory(const GrVkGpu* gpu, bool linearTiling,
     }
     if (!heap->free(alloc)) {
         // must be an adopted allocation
-        GR_VK_CALL(gpu->vkInterface(), FreeMemory(gpu->device(), alloc.fMemory, nullptr));
+        GR_VK_CALL(gpu->vkInterface(), FreeMemory(gpu->device(), alloc.fMemory, nullptr))
     } else {
         gTotalImageMemory -= alloc.fSize;
         VkDeviceSize pageAlignedSize = align_size(alloc.fSize, kMinVulkanPageSize);
@@ -274,7 +274,7 @@ VkAccessFlags GrVkMemory::LayoutToSrcAccessMask(const VkImageLayout layout) {
     // and the image is linear.
     // TODO: Add check for linear here so we are not always adding host to general, and we should
     //       only be in preinitialized if we are linear
-    VkAccessFlags flags = 0;;
+    VkAccessFlags flags = 0;
     if (VK_IMAGE_LAYOUT_GENERAL == layout) {
         flags = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT |
                 VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT |
@@ -320,7 +320,7 @@ void GrVkMemory::FlushMappedAlloc(const GrVkGpu* gpu, const GrVkAlloc& alloc, Vk
         mappedMemoryRange.offset = offset;
         mappedMemoryRange.size = size;
         GR_VK_CALL(gpu->vkInterface(), FlushMappedMemoryRanges(gpu->device(),
-                                                               1, &mappedMemoryRange));
+                                                               1, &mappedMemoryRange))
     }
 }
 
@@ -346,7 +346,7 @@ void GrVkMemory::InvalidateMappedAlloc(const GrVkGpu* gpu, const GrVkAlloc& allo
         mappedMemoryRange.offset = offset;
         mappedMemoryRange.size = size;
         GR_VK_CALL(gpu->vkInterface(), InvalidateMappedMemoryRanges(gpu->device(),
-                                                               1, &mappedMemoryRange));
+                                                               1, &mappedMemoryRange))
     }
 }
 
@@ -518,7 +518,7 @@ GrVkSubHeap::GrVkSubHeap(const GrVkGpu* gpu, uint32_t memoryTypeIndex, uint32_t 
     VkResult err = GR_VK_CALL(gpu->vkInterface(), AllocateMemory(gpu->device(),
                                                                  &allocInfo,
                                                                  nullptr,
-                                                                 &fAlloc));
+                                                                 &fAlloc))
     if (VK_SUCCESS != err) {
         this->reset();
     }
@@ -531,7 +531,7 @@ GrVkSubHeap::GrVkSubHeap(const GrVkGpu* gpu, uint32_t memoryTypeIndex, uint32_t 
 
 GrVkSubHeap::~GrVkSubHeap() {
     const GrVkInterface* iface = fGpu->vkInterface();
-    GR_VK_CALL(iface, FreeMemory(fGpu->device(), fAlloc, nullptr));
+    GR_VK_CALL(iface, FreeMemory(fGpu->device(), fAlloc, nullptr))
 #ifdef SK_DEBUG
     gHeapUsage[fHeapIndex] -= fSize;
 #endif
@@ -564,7 +564,7 @@ bool GrVkHeap::subAlloc(VkDeviceSize size, VkDeviceSize alignment,
         VkResult err = GR_VK_CALL(fGpu->vkInterface(), AllocateMemory(fGpu->device(),
                                                                       &allocInfo,
                                                                       nullptr,
-                                                                      &alloc->fMemory));
+                                                                      &alloc->fMemory))
         if (VK_SUCCESS != err) {
             return false;
         }
@@ -665,7 +665,7 @@ bool GrVkHeap::free(const GrVkAlloc& alloc) {
     // a size of 0 means we're using the system heap
     if (alloc.fUsesSystemHeap) {
         const GrVkInterface* iface = fGpu->vkInterface();
-        GR_VK_CALL(iface, FreeMemory(fGpu->device(), alloc.fMemory, nullptr));
+        GR_VK_CALL(iface, FreeMemory(fGpu->device(), alloc.fMemory, nullptr))
         return true;
     }
 

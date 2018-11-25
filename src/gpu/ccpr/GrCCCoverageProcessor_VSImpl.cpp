@@ -356,12 +356,12 @@ void GrCCCoverageProcessor::initVS(GrResourceProvider* rp) {
 
     switch (fRenderPass) {
         case RenderPass::kTriangleHulls: {
-            GR_DEFINE_STATIC_UNIQUE_KEY(gHull3AndEdgeVertexBufferKey);
+            GR_DEFINE_STATIC_UNIQUE_KEY(gHull3AndEdgeVertexBufferKey)
             fVertexBuffer = rp->findOrMakeStaticBuffer(kVertex_GrBufferType,
                                                        sizeof(kHull3AndEdgeVertices),
                                                        kHull3AndEdgeVertices,
                                                        gHull3AndEdgeVertexBufferKey);
-            GR_DEFINE_STATIC_UNIQUE_KEY(gHull3AndEdgeIndexBufferKey);
+            GR_DEFINE_STATIC_UNIQUE_KEY(gHull3AndEdgeIndexBufferKey)
             if (caps.usePrimitiveRestart()) {
                 fIndexBuffer = rp->findOrMakeStaticBuffer(kIndex_GrBufferType,
                                                           sizeof(kHull3AndEdgeIndicesAsStrips),
@@ -379,10 +379,10 @@ void GrCCCoverageProcessor::initVS(GrResourceProvider* rp) {
         }
         case RenderPass::kQuadraticHulls:
         case RenderPass::kCubicHulls: {
-            GR_DEFINE_STATIC_UNIQUE_KEY(gHull4VertexBufferKey);
+            GR_DEFINE_STATIC_UNIQUE_KEY(gHull4VertexBufferKey)
             fVertexBuffer = rp->findOrMakeStaticBuffer(kVertex_GrBufferType, sizeof(kHull4Vertices),
                                                        kHull4Vertices, gHull4VertexBufferKey);
-            GR_DEFINE_STATIC_UNIQUE_KEY(gHull4IndexBufferKey);
+            GR_DEFINE_STATIC_UNIQUE_KEY(gHull4IndexBufferKey)
             if (caps.usePrimitiveRestart()) {
                 fIndexBuffer = rp->findOrMakeStaticBuffer(kIndex_GrBufferType,
                                                           sizeof(kHull4IndicesAsStrips),
@@ -404,7 +404,7 @@ void GrCCCoverageProcessor::initVS(GrResourceProvider* rp) {
         case RenderPass::kTriangleCorners:
         case RenderPass::kQuadraticCorners:
         case RenderPass::kCubicCorners: {
-            GR_DEFINE_STATIC_UNIQUE_KEY(gCornerIndexBufferKey);
+            GR_DEFINE_STATIC_UNIQUE_KEY(gCornerIndexBufferKey)
             if (caps.usePrimitiveRestart()) {
                 fIndexBuffer = rp->findOrMakeStaticBuffer(kIndex_GrBufferType,
                                                           sizeof(kCornerIndicesAsStrips),

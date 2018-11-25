@@ -67,14 +67,14 @@ GrVkSampler* GrVkSampler::Create(const GrVkGpu* gpu, const GrSamplerState& sampl
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), CreateSampler(gpu->device(),
                                                           &createInfo,
                                                           nullptr,
-                                                          &sampler));
+                                                          &sampler))
 
     return new GrVkSampler(sampler, GenerateKey(samplerState, maxMipLevel));
 }
 
 void GrVkSampler::freeGPUData(const GrVkGpu* gpu) const {
     SkASSERT(fSampler);
-    GR_VK_CALL(gpu->vkInterface(), DestroySampler(gpu->device(), fSampler, nullptr));
+    GR_VK_CALL(gpu->vkInterface(), DestroySampler(gpu->device(), fSampler, nullptr))
 }
 
 uint16_t GrVkSampler::GenerateKey(const GrSamplerState& samplerState, uint32_t maxMipLevel) {

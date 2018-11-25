@@ -706,7 +706,7 @@ GrPathRenderer::CanDrawPath GrMSAAPathRenderer::onCanDrawPath(const CanDrawPathA
 
 bool GrMSAAPathRenderer::onDrawPath(const DrawPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrMSAAPathRenderer::onDrawPath");
+                              "GrMSAAPathRenderer::onDrawPath")
     SkTLazy<GrShape> tmpShape;
     const GrShape* shape = args.fShape;
     if (shape->style().applies()) {
@@ -726,7 +726,7 @@ bool GrMSAAPathRenderer::onDrawPath(const DrawPathArgs& args) {
 
 void GrMSAAPathRenderer::onStencilPath(const StencilPathArgs& args) {
     GR_AUDIT_TRAIL_AUTO_FRAME(args.fRenderTargetContext->auditTrail(),
-                              "GrMSAAPathRenderer::onStencilPath");
+                              "GrMSAAPathRenderer::onStencilPath")
     SkASSERT(args.fShape->style().isSimpleFill());
     SkASSERT(!args.fShape->mayBeInverseFilledAfterStyling());
 

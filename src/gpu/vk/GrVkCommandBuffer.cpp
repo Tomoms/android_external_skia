@@ -50,7 +50,7 @@ void GrVkCommandBuffer::freeGPUData(const GrVkGpu* gpu) const {
     }
 
     GR_VK_CALL(gpu->vkInterface(), FreeCommandBuffers(gpu->device(), gpu->cmdPool(),
-                                                      1, &fCmdBuffer));
+                                                      1, &fCmdBuffer))
 
     this->onFreeGPUData(gpu);
 }
@@ -91,7 +91,7 @@ void GrVkCommandBuffer::reset(GrVkGpu* gpu) {
 
     // we will retain resources for later use
     VkCommandBufferResetFlags flags = 0;
-    GR_VK_CALL(gpu->vkInterface(), ResetCommandBuffer(fCmdBuffer, flags));
+    GR_VK_CALL(gpu->vkInterface(), ResetCommandBuffer(fCmdBuffer, flags))
 
     this->onReset(gpu);
 }
@@ -121,7 +121,7 @@ void GrVkCommandBuffer::pipelineBarrier(const GrVkGpu* gpu,
                                                               dstStageMask, dependencyFlags,
                                                               1, barrierPtr,
                                                               0, nullptr,
-                                                              0, nullptr));
+                                                              0, nullptr))
             break;
         }
 
@@ -132,7 +132,7 @@ void GrVkCommandBuffer::pipelineBarrier(const GrVkGpu* gpu,
                                                               dstStageMask, dependencyFlags,
                                                               0, nullptr,
                                                               1, barrierPtr,
-                                                              0, nullptr));
+                                                              0, nullptr))
             break;
         }
 
@@ -143,7 +143,7 @@ void GrVkCommandBuffer::pipelineBarrier(const GrVkGpu* gpu,
                                                               dstStageMask, dependencyFlags,
                                                               0, nullptr,
                                                               0, nullptr,
-                                                              1, barrierPtr));
+                                                              1, barrierPtr))
             break;
         }
     }
@@ -163,7 +163,7 @@ void GrVkCommandBuffer::bindInputBuffer(GrVkGpu* gpu, uint32_t binding,
                                                             binding,
                                                             1,
                                                             &vkBuffer,
-                                                            &offset));
+                                                            &offset))
         fBoundInputBuffers[binding] = vkBuffer;
         addResource(vbuffer->resource());
     }
@@ -178,7 +178,7 @@ void GrVkCommandBuffer::bindIndexBuffer(GrVkGpu* gpu, const GrVkIndexBuffer* ibu
         GR_VK_CALL(gpu->vkInterface(), CmdBindIndexBuffer(fCmdBuffer,
                                                           vkBuffer,
                                                           ibuffer->offset(),
-                                                          VK_INDEX_TYPE_UINT16));
+                                                          VK_INDEX_TYPE_UINT16))
         fBoundIndexBuffer = vkBuffer;
         addResource(ibuffer->resource());
     }
@@ -206,7 +206,7 @@ void GrVkCommandBuffer::clearAttachments(const GrVkGpu* gpu,
                                                        numAttachments,
                                                        attachments,
                                                        numRects,
-                                                       clearRects));
+                                                       clearRects))
 }
 
 void GrVkCommandBuffer::bindDescriptorSets(const GrVkGpu* gpu,
@@ -225,7 +225,7 @@ void GrVkCommandBuffer::bindDescriptorSets(const GrVkGpu* gpu,
                                                          setCount,
                                                          descriptorSets,
                                                          dynamicOffsetCount,
-                                                         dynamicOffsets));
+                                                         dynamicOffsets))
     pipelineState->addUniformResources(*this);
 }
 
@@ -246,7 +246,7 @@ void GrVkCommandBuffer::bindDescriptorSets(const GrVkGpu* gpu,
                                                          setCount,
                                                          descriptorSets,
                                                          dynamicOffsetCount,
-                                                         dynamicOffsets));
+                                                         dynamicOffsets))
     for (int i = 0; i < recycled.count(); ++i) {
         this->addRecycledResource(recycled[i]);
     }
@@ -259,7 +259,7 @@ void GrVkCommandBuffer::bindPipeline(const GrVkGpu* gpu, const GrVkPipeline* pip
     SkASSERT(fIsActive);
     GR_VK_CALL(gpu->vkInterface(), CmdBindPipeline(fCmdBuffer,
                                                    VK_PIPELINE_BIND_POINT_GRAPHICS,
-                                                   pipeline->pipeline()));
+                                                   pipeline->pipeline()))
     this->addResource(pipeline);
 }
 
@@ -276,7 +276,7 @@ void GrVkCommandBuffer::drawIndexed(const GrVkGpu* gpu,
                                                   instanceCount,
                                                   firstIndex,
                                                   vertexOffset,
-                                                  firstInstance));
+                                                  firstInstance))
 }
 
 void GrVkCommandBuffer::draw(const GrVkGpu* gpu,
@@ -290,7 +290,7 @@ void GrVkCommandBuffer::draw(const GrVkGpu* gpu,
                                            vertexCount,
                                            instanceCount,
                                            firstVertex,
-                                           firstInstance));
+                                           firstInstance))
 }
 
 void GrVkCommandBuffer::setViewport(const GrVkGpu* gpu,
@@ -303,7 +303,7 @@ void GrVkCommandBuffer::setViewport(const GrVkGpu* gpu,
         GR_VK_CALL(gpu->vkInterface(), CmdSetViewport(fCmdBuffer,
                                                       firstViewport,
                                                       viewportCount,
-                                                      viewports));
+                                                      viewports))
         fCachedViewport = viewports[0];
     }
 }
@@ -318,7 +318,7 @@ void GrVkCommandBuffer::setScissor(const GrVkGpu* gpu,
         GR_VK_CALL(gpu->vkInterface(), CmdSetScissor(fCmdBuffer,
                                                      firstScissor,
                                                      scissorCount,
-                                                     scissors));
+                                                     scissors))
         fCachedScissor = scissors[0];
     }
 }
@@ -327,7 +327,7 @@ void GrVkCommandBuffer::setBlendConstants(const GrVkGpu* gpu,
                                           const float blendConstants[4]) {
     SkASSERT(fIsActive);
     if (memcmp(blendConstants, fCachedBlendConstant, 4 * sizeof(float))) {
-        GR_VK_CALL(gpu->vkInterface(), CmdSetBlendConstants(fCmdBuffer, blendConstants));
+        GR_VK_CALL(gpu->vkInterface(), CmdSetBlendConstants(fCmdBuffer, blendConstants))
         memcpy(fCachedBlendConstant, blendConstants, 4 * sizeof(float));
     }
 }
@@ -353,7 +353,7 @@ GrVkPrimaryCommandBuffer* GrVkPrimaryCommandBuffer::Create(const GrVkGpu* gpu,
     VkCommandBuffer cmdBuffer;
     VkResult err = GR_VK_CALL(gpu->vkInterface(), AllocateCommandBuffers(gpu->device(),
                                                                          &cmdInfo,
-                                                                         &cmdBuffer));
+                                                                         &cmdBuffer))
     if (err) {
         return nullptr;
     }
@@ -370,14 +370,14 @@ void GrVkPrimaryCommandBuffer::begin(const GrVkGpu* gpu) {
     cmdBufferBeginInfo.pInheritanceInfo = nullptr;
 
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), BeginCommandBuffer(fCmdBuffer,
-                                                               &cmdBufferBeginInfo));
+                                                               &cmdBufferBeginInfo))
     fIsActive = true;
 }
 
 void GrVkPrimaryCommandBuffer::end(const GrVkGpu* gpu) {
     SkASSERT(fIsActive);
     SkASSERT(!fActiveRenderPass);
-    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), EndCommandBuffer(fCmdBuffer));
+    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), EndCommandBuffer(fCmdBuffer))
     this->invalidateState();
     fIsActive = false;
 }
@@ -409,7 +409,7 @@ void GrVkPrimaryCommandBuffer::beginRenderPass(const GrVkGpu* gpu,
     VkSubpassContents contents = forSecondaryCB ? VK_SUBPASS_CONTENTS_SECONDARY_COMMAND_BUFFERS
                                                 : VK_SUBPASS_CONTENTS_INLINE;
 
-    GR_VK_CALL(gpu->vkInterface(), CmdBeginRenderPass(fCmdBuffer, &beginInfo, contents));
+    GR_VK_CALL(gpu->vkInterface(), CmdBeginRenderPass(fCmdBuffer, &beginInfo, contents))
     fActiveRenderPass = renderPass;
     this->addResource(renderPass);
     target.addResources(*this);
@@ -418,7 +418,7 @@ void GrVkPrimaryCommandBuffer::beginRenderPass(const GrVkGpu* gpu,
 void GrVkPrimaryCommandBuffer::endRenderPass(const GrVkGpu* gpu) {
     SkASSERT(fIsActive);
     SkASSERT(fActiveRenderPass);
-    GR_VK_CALL(gpu->vkInterface(), CmdEndRenderPass(fCmdBuffer));
+    GR_VK_CALL(gpu->vkInterface(), CmdEndRenderPass(fCmdBuffer))
     fActiveRenderPass = nullptr;
 }
 
@@ -429,7 +429,7 @@ void GrVkPrimaryCommandBuffer::executeCommands(const GrVkGpu* gpu,
     SkASSERT(fActiveRenderPass);
     SkASSERT(fActiveRenderPass->isCompatible(*buffer->fActiveRenderPass));
 
-    GR_VK_CALL(gpu->vkInterface(), CmdExecuteCommands(fCmdBuffer, 1, &buffer->fCmdBuffer));
+    GR_VK_CALL(gpu->vkInterface(), CmdExecuteCommands(fCmdBuffer, 1, &buffer->fCmdBuffer))
     buffer->ref();
     fSecondaryCommandBuffers.push_back(buffer);
     // When executing a secondary command buffer all state (besides render pass state) becomes
@@ -458,7 +458,7 @@ static void submit_to_queue(const GrVkInterface* interface,
     submitInfo.pCommandBuffers = commandBuffers;
     submitInfo.signalSemaphoreCount = signalCount;
     submitInfo.pSignalSemaphores = signalSemaphores;
-    GR_VK_CALL_ERRCHECK(interface, QueueSubmit(queue, 1, &submitInfo, fence));
+    GR_VK_CALL_ERRCHECK(interface, QueueSubmit(queue, 1, &submitInfo, fence))
 }
 
 void GrVkPrimaryCommandBuffer::submitToQueue(
@@ -475,10 +475,10 @@ void GrVkPrimaryCommandBuffer::submitToQueue(
         memset(&fenceInfo, 0, sizeof(VkFenceCreateInfo));
         fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
         err = GR_VK_CALL(gpu->vkInterface(), CreateFence(gpu->device(), &fenceInfo, nullptr,
-                                                         &fSubmitFence));
+                                                         &fSubmitFence))
         SkASSERT(!err);
     } else {
-        GR_VK_CALL(gpu->vkInterface(), ResetFences(gpu->device(), 1, &fSubmitFence));
+        GR_VK_CALL(gpu->vkInterface(), ResetFences(gpu->device(), 1, &fSubmitFence))
     }
 
     int signalCount = signalSemaphores.count();
@@ -530,7 +530,7 @@ void GrVkPrimaryCommandBuffer::submitToQueue(
 
     if (GrVkGpu::kForce_SyncQueue == sync) {
         err = GR_VK_CALL(gpu->vkInterface(),
-                         WaitForFences(gpu->device(), 1, &fSubmitFence, true, UINT64_MAX));
+                         WaitForFences(gpu->device(), 1, &fSubmitFence, true, UINT64_MAX))
         if (VK_TIMEOUT == err) {
             SkDebugf("Fence failed to signal: %d\n", err);
             SK_ABORT("failing");
@@ -538,7 +538,7 @@ void GrVkPrimaryCommandBuffer::submitToQueue(
         SkASSERT(!err);
 
         // Destroy the fence
-        GR_VK_CALL(gpu->vkInterface(), DestroyFence(gpu->device(), fSubmitFence, nullptr));
+        GR_VK_CALL(gpu->vkInterface(), DestroyFence(gpu->device(), fSubmitFence, nullptr))
         fSubmitFence = VK_NULL_HANDLE;
     }
 }
@@ -548,7 +548,7 @@ bool GrVkPrimaryCommandBuffer::finished(const GrVkGpu* gpu) const {
         return true;
     }
 
-    VkResult err = GR_VK_CALL(gpu->vkInterface(), GetFenceStatus(gpu->device(), fSubmitFence));
+    VkResult err = GR_VK_CALL(gpu->vkInterface(), GetFenceStatus(gpu->device(), fSubmitFence))
     switch (err) {
         case VK_SUCCESS:
             return true;
@@ -589,7 +589,7 @@ void GrVkPrimaryCommandBuffer::copyImage(const GrVkGpu* gpu,
                                                 dstImage->image(),
                                                 dstLayout,
                                                 copyRegionCount,
-                                                copyRegions));
+                                                copyRegions))
 }
 
 void GrVkPrimaryCommandBuffer::blitImage(const GrVkGpu* gpu,
@@ -613,7 +613,7 @@ void GrVkPrimaryCommandBuffer::blitImage(const GrVkGpu* gpu,
                                                 dstLayout,
                                                 blitRegionCount,
                                                 blitRegions,
-                                                filter));
+                                                filter))
 }
 
 void GrVkPrimaryCommandBuffer::blitImage(const GrVkGpu* gpu,
@@ -650,7 +650,7 @@ void GrVkPrimaryCommandBuffer::copyImageToBuffer(const GrVkGpu* gpu,
                                                         srcLayout,
                                                         dstBuffer->buffer(),
                                                         copyRegionCount,
-                                                        copyRegions));
+                                                        copyRegions))
 }
 
 void GrVkPrimaryCommandBuffer::copyBufferToImage(const GrVkGpu* gpu,
@@ -668,7 +668,7 @@ void GrVkPrimaryCommandBuffer::copyBufferToImage(const GrVkGpu* gpu,
                                                         dstImage->image(),
                                                         dstLayout,
                                                         copyRegionCount,
-                                                        copyRegions));
+                                                        copyRegions))
 }
 
 
@@ -695,7 +695,7 @@ void GrVkPrimaryCommandBuffer::copyBuffer(GrVkGpu* gpu,
                                                  srcBuffer->buffer(),
                                                  dstBuffer->buffer(),
                                                  regionCount,
-                                                 regions));
+                                                 regions))
 }
 
 void GrVkPrimaryCommandBuffer::updateBuffer(GrVkGpu* gpu,
@@ -714,7 +714,7 @@ void GrVkPrimaryCommandBuffer::updateBuffer(GrVkGpu* gpu,
                                                    dstBuffer->buffer(),
                                                    dstOffset,
                                                    dataSize,
-                                                   (const uint32_t*) data));
+                                                   (const uint32_t*) data))
 }
 
 void GrVkPrimaryCommandBuffer::clearColorImage(const GrVkGpu* gpu,
@@ -730,7 +730,7 @@ void GrVkPrimaryCommandBuffer::clearColorImage(const GrVkGpu* gpu,
                                                       image->currentLayout(),
                                                       color,
                                                       subRangeCount,
-                                                      subRanges));
+                                                      subRanges))
 }
 
 void GrVkPrimaryCommandBuffer::clearDepthStencilImage(const GrVkGpu* gpu,
@@ -746,7 +746,7 @@ void GrVkPrimaryCommandBuffer::clearDepthStencilImage(const GrVkGpu* gpu,
                                                              image->currentLayout(),
                                                              color,
                                                              subRangeCount,
-                                                             subRanges));
+                                                             subRanges))
 }
 
 void GrVkPrimaryCommandBuffer::resolveImage(GrVkGpu* gpu,
@@ -766,14 +766,14 @@ void GrVkPrimaryCommandBuffer::resolveImage(GrVkGpu* gpu,
                                                    dstImage.image(),
                                                    dstImage.currentLayout(),
                                                    regionCount,
-                                                   regions));
+                                                   regions))
 }
 
 void GrVkPrimaryCommandBuffer::onFreeGPUData(const GrVkGpu* gpu) const {
     SkASSERT(!fActiveRenderPass);
     // Destroy the fence, if any
     if (VK_NULL_HANDLE != fSubmitFence) {
-        GR_VK_CALL(gpu->vkInterface(), DestroyFence(gpu->device(), fSubmitFence, nullptr));
+        GR_VK_CALL(gpu->vkInterface(), DestroyFence(gpu->device(), fSubmitFence, nullptr))
     }
 }
 
@@ -794,7 +794,7 @@ GrVkSecondaryCommandBuffer* GrVkSecondaryCommandBuffer::Create(const GrVkGpu* gp
     VkCommandBuffer cmdBuffer;
     VkResult err = GR_VK_CALL(gpu->vkInterface(), AllocateCommandBuffers(gpu->device(),
                                                                          &cmdInfo,
-                                                                         &cmdBuffer));
+                                                                         &cmdBuffer))
     if (err) {
         return nullptr;
     }
@@ -828,13 +828,13 @@ void GrVkSecondaryCommandBuffer::begin(const GrVkGpu* gpu, const GrVkFramebuffer
     cmdBufferBeginInfo.pInheritanceInfo = &inheritanceInfo;
 
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), BeginCommandBuffer(fCmdBuffer,
-                                                               &cmdBufferBeginInfo));
+                                                               &cmdBufferBeginInfo))
     fIsActive = true;
 }
 
 void GrVkSecondaryCommandBuffer::end(const GrVkGpu* gpu) {
     SkASSERT(fIsActive);
-    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), EndCommandBuffer(fCmdBuffer));
+    GR_VK_CALL_ERRCHECK(gpu->vkInterface(), EndCommandBuffer(fCmdBuffer))
     this->invalidateState();
     fIsActive = false;
 }

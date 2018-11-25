@@ -136,12 +136,12 @@ void GrVkRenderPass::init(const GrVkGpu* gpu,
     GR_VK_CALL_ERRCHECK(gpu->vkInterface(), CreateRenderPass(gpu->device(),
                                                              &createInfo,
                                                              nullptr,
-                                                             &fRenderPass));
+                                                             &fRenderPass))
 
     // Get granularity for this render pass
     GR_VK_CALL(gpu->vkInterface(), GetRenderAreaGranularity(gpu->device(),
                                                             fRenderPass,
-                                                            &fGranularity));
+                                                            &fGranularity))
 }
 
 void GrVkRenderPass::init(const GrVkGpu* gpu,
@@ -164,7 +164,7 @@ void GrVkRenderPass::init(const GrVkGpu* gpu,
 }
 
 void GrVkRenderPass::freeGPUData(const GrVkGpu* gpu) const {
-    GR_VK_CALL(gpu->vkInterface(), DestroyRenderPass(gpu->device(), fRenderPass, nullptr));
+    GR_VK_CALL(gpu->vkInterface(), DestroyRenderPass(gpu->device(), fRenderPass, nullptr))
 }
 
 // Works under the assumption that color attachment will always be the first attachment in our
