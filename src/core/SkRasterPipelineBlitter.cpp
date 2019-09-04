@@ -22,8 +22,12 @@
 #include "src/core/SkRasterPipeline.h"
 #include "src/shaders/SkShaderBase.h"
 
-#define SK_BLITTER_TRACE_IS_RASTER_PIPELINE
 #include "src/utils/SkBlitterTrace.h"
+#include <semaphore.h>
+#include <assert.h>
+#include <pthread.h>
+#include <sys/sysinfo.h>
+#define SK_BLITTER_TRACE_IS_RASTER_PIPELINE
 
 class SkRasterPipelineBlitter final : public SkBlitter {
 public:
@@ -89,6 +93,63 @@ private:
 
     using INHERITED = SkBlitter;
 };
+
+#define __ATOMIC_INLINE__ static __inline__ __attribute__((always_inline))
+__ATOMIC_INLINE__ int __atomic_dec(volatile int *ptr) {
+  return __sync_fetch_and_sub (ptr, 1);
+}
+__ATOMIC_INLINE__ int __atomic_inc(volatile int *ptr) {
+  return __sync_fetch_and_add (ptr, 1);
+}
+static volatile int worker_thread_inited = 0;
+static volatile int worker_thread_busy = 0;
+#define MAX_WORKER_THREADS_NUM 3
+
+static pthread_t worker_threads[MAX_WORKER_THREADS_NUM];
+sem_t sem_todo[MAX_WORKER_THREADS_NUM];
+sem_t sem_done[MAX_WORKER_THREADS_NUM];
+static volatile void* work[MAX_WORKER_THREADS_NUM] = {0};
+static int worker_thread_num = 0;
+
+extern const char* __progname;
+
+static int is_not_zygote(){
+
+    const char* buf = __progname;
+    const char* zygote = "zygote";
+    /*
+     * adb shell cat /proc/192/cmdline
+     * zygote/bin/app_process-Xzygote/system/bin--zygote--start-system-server
+     */
+    return strncmp(buf, zygote, 6);
+}
+
+struct shadeSpanArg {
+    int x;
+    int y;
+    int width;
+    int height;
+    std::function<void(size_t, size_t, size_t, size_t)> func;
+};
+
+void* worker_blitRect(void* arg) {
+    long id = (long)arg;
+    while(1) {
+        sem_wait(&sem_todo[id]);
+        if (work[id] != 0) {
+            struct shadeSpanArg* arg = (struct shadeSpanArg*)work[id];
+            int x = arg->x;
+            int y = arg->y;
+            int width = arg->width;
+            int height = arg->height;
+            if (arg->func) {
+               arg->func(x, y, width, height);
+            }
+            work[id] = 0;
+        }
+        sem_post(&sem_done[id]);
+    }
+}
 
 SkBlitter* SkCreateRasterPipelineBlitter(const SkPixmap& dst,
                                          const SkPaint& paint,
@@ -387,6 +448,85 @@ void SkRasterPipelineBlitter::blitRectWithTrace(int x, int y, int w, int h, bool
         fBlitRect = p.compile();
     }
 
+    //Disable this since some issue found
+    if (false && (w * h) > (750 * 400) && h >= 4) {
+        if (__atomic_inc(&worker_thread_busy) == 0) {
+            if (!worker_thread_inited) {
+                if (__atomic_inc(&worker_thread_inited) == 0) {
+                //Only start the other thread in non-zygote mode.
+                    if (!is_not_zygote()) {
+                        __atomic_dec(&worker_thread_busy);
+                        __atomic_dec(&worker_thread_inited);
+                        goto fb;
+                    }
+                    long i;
+                    worker_thread_num = (get_nprocs_conf()/2 -1);
+                    if (worker_thread_num > MAX_WORKER_THREADS_NUM) {
+                        worker_thread_num = MAX_WORKER_THREADS_NUM;
+                    } else if (worker_thread_num <= 2) {
+                        worker_thread_num = 1;
+                    }
+                    for (i = 0; i < worker_thread_num; i++) {
+                        sem_init(&sem_todo[i], 0, 0);
+                        sem_init(&sem_done[i], 0, 0);
+                        pthread_create(&worker_threads[i], NULL, worker_blitRect, (void *)i);
+                    }
+                }
+            }
+            if (worker_thread_num > 0) {
+                struct shadeSpanArg msg[worker_thread_num];
+
+                if (worker_thread_num == 1) {
+                    msg[0].y = y + (h >> 1);
+                    msg[0].height = h - (h >> 1);
+
+                    h = (h >> 1);
+                } else if (worker_thread_num == 3) {
+                    msg[0].y = (y + (h >> 2));
+                    msg[0].height = ((h >> 1) - (h >> 2));
+
+                    msg[1].y = (y + (h >> 1));
+                    msg[1].height = (h - (h >> 1)) >> 1;
+
+                    msg[2].y = (y + (h >> 1) + ((h - (h >> 1)) >> 1));
+                    msg[2].height = h - (h >> 1) - ((h - (h >> 1)) >> 1);
+
+                    h = (h >> 2);
+                } else {
+                    __atomic_dec(&worker_thread_busy);
+                    goto fb;
+                }
+
+                for (int i = 0; i < worker_thread_num; i++) {
+                    msg[i].x = x;
+                    msg[i].width = w;
+                    msg[i].func = fBlitRect;
+                    assert( work[i] == 0);
+                    work[i] = &msg[i];
+
+                    sem_post(&sem_todo[i]);
+                }
+
+                fBlitRect(x,y,w,h);
+
+                for (int i = 0; i < worker_thread_num; i++) {
+                    sem_wait(&sem_done[i]);
+
+                   /* Need to set to NULL value. No point in still storing addresso of local
+                    * variable, after function returns
+                    */
+                    work[i] = NULL;
+                }
+                __atomic_dec(&worker_thread_busy);
+            } else {
+                __atomic_dec(&worker_thread_busy);
+                goto fb;
+            }
+            return;
+        }
+  }
+
+fb:
     SK_BLITTER_TRACE_STEP(blitRect, trace, /*scanlines=*/h, /*pixels=*/w * h);
     fBlitRect(x,y,w,h);
 }
