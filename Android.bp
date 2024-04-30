@@ -66,6 +66,9 @@ cc_defaults {
 
         arm64: {
             srcs: [],
+            lto: {
+                thin: true,
+            },
         },
 
         x86: {
