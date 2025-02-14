@@ -110,11 +110,17 @@ cc_defaults {
         "-Wno-unused-parameter",
         "-Wno-unused-variable",
         "-fvisibility=hidden",
+        "-O3",
     ],
 
     cppflags:[
-        
+        "-O3",
     ],
+
+    lto: {
+        thin: true,
+    },
+    whole_program_vtables: true,
 
     export_include_dirs: [
         "",
