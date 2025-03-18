@@ -117,18 +117,12 @@ cc_defaults {
         "-O3",
     ],
 
-    lto: {
-        thin: true,
-    },
- 
     target: {
         android_arm64: {
             cflags: ["-fsplit-machine-functions"],
             ldflags: ["-fsplit-machine-functions"],
         },
     },
-
-    whole_program_vtables: true,
 
     export_include_dirs: [
         "",
